@@ -35,7 +35,7 @@ module.exports = {
             // Keep in mind that if "LOAD_ON_MAINSERVER" is set to true then this code will be replaced with the main server's port instead.
             PORT: 3001,
             // Get the gamemode you want to select with.
-            GAMEMODE: ["domination"],
+            GAMEMODE: ["maze"],
             // The region, can be anything.
             REGION: "local",
             // How many players can join until it's full.
@@ -95,7 +95,7 @@ module.exports = {
     maxHeartbeatInterval: 300000,
 
     // Set halloween theme by adding the eye entities to the walls and replacing rocks to pumpkins
-    HALLOWEEN_THEME: true,
+    HALLOWEEN_THEME: false,
 
     // Where the bullet spawns, where 1 is fully outside the barrel and -1 is fully inside the barrel, and 0 is halfway between.
     bulletSpawnOffset: 1,
