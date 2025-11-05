@@ -586,8 +586,6 @@ const g = require('../gunvals.js');
         //FACING_TYPE: "smoothToTarget",
         DANGER: 9999,
         SIZE: 200,
-        // TODO: get rid of this when team colored props are fixed
-        COLOR: "#a81818",
         SHAKE: [
             {
                 CAMERA_SHAKE: {
@@ -676,7 +674,8 @@ const g = require('../gunvals.js');
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.omegaObliterator, g.fake]),
                     NO_LIMITATIONS: true,
-                    TYPE: "omegaObliteratorBullet"
+                    TYPE: "omegaObliteratorBullet",
+                    COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -7.5, SATURATION_SHIFT: 0.3}
                 },
             },
             
@@ -705,18 +704,39 @@ const g = require('../gunvals.js');
 
             {
                 POSITION: [2, 2, 0.001, 10, 0, -60, 0],
+                PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -7.5, SATURATION_SHIFT: 0.3} }
             },
             {
                 POSITION: [2, 2, 0.001, 10, 0, -37.5, 0],
+                PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -7.5, SATURATION_SHIFT: 0.3} }
             },
             {
                 POSITION: [2, 2, 0.001, 10, 0, 60, 0],
+                PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -7.5, SATURATION_SHIFT: 0.3} }
             },
             {
                 POSITION: [2, 2, 0.001, 10, 0, 37.5, 0],
+                PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -7.5, SATURATION_SHIFT: 0.3} }
             },
             {
                 POSITION: [4, 2, 0.001, 10, 0, 0, 0],
+                PROPERTIES: { COLOR: {BASE: -1, BRIGHTNESS_SHIFT: -7.5, SATURATION_SHIFT: 0.3} }
+            },
+
+            {
+                POSITION: [1, 4.5, 0.9, 9.5, 0, -60, 0],
+            },
+            {
+                POSITION: [1, 4.5, 0.9, 9.5, 0, -37.5, 0],
+            },
+            {
+                POSITION: [1, 4.5, 0.9, 9.5, 0, 60, 0],
+            },
+            {
+                POSITION: [1, 4.5, 0.9, 9.5, 0, 37.5, 0],
+            },
+            {
+                POSITION: [1, 4.5, 0.9, 9.5, 0, 0, 0],
             },
 
             {
@@ -743,33 +763,28 @@ const g = require('../gunvals.js');
             {
                 POSITION: [0.5, 1, 0.001, 7.8, -13, 90, 0],
             },
-            {
-                POSITION: [0.5, 1, 0.001, 7.8, 11, -90, 0],
-            },
-            {
-                POSITION: [0.5, 1, 0.001, 7.8, -11, 90, 0],
-            },
         ],
-        PROPS: [
+        //would use props but they dont flippin go the right colors for some reason?
+        TURRETS: [
             {
-                POSITION: [21, 0, 0, 180, 0],
-                TYPE: ["bullet"]
+                POSITION: {SIZE: 21, X: 0, Y: 0, ANGLE: 180, LAYER: 0},
+                TYPE: ["egg", {COLOR: 16, MIRROR_MASTER_ANGLE: true}]
             },
             {
-                POSITION: [13 + 1, 0, 0, 180, 1],
-                TYPE: "bullet"
+                POSITION: {SIZE: 13 + 1, X: 0, Y: 0, ANGLE: 180, LAYER: 1},
+                TYPE: ["egg", {COLOR: 16, MIRROR_MASTER_ANGLE: true}]
             },
             {
-                POSITION: [13, 0, 0, 180, 1],
-                TYPE: ["bullet", {COLOR: "#a81818"}]
+                POSITION: {SIZE: 13, X: 0, Y: 0, ANGLE: 180, LAYER: 1},
+                TYPE: ["egg", {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}, MIRROR_MASTER_ANGLE: true}]
             },
             {
-                POSITION: [(80/20) + 1, 0, 0, 180, 1],
-                TYPE: "bullet"
+                POSITION: {SIZE: (80 / 20) + 1, X: 0, Y: 0, ANGLE: 180, LAYER: 1},
+                TYPE: ["egg", {COLOR: 16, MIRROR_MASTER_ANGLE: true}]
             },
             {
-                POSITION: [80/20, 0, 0, 180, 1],
-                TYPE: ["bullet", {COLOR: "#a81818"}]
+                POSITION: {SIZE: 80 / 20, X: 0, Y: 0, ANGLE: 180, LAYER: 1},
+                TYPE: ["egg", {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 15}, MIRROR_MASTER_ANGLE: true}]
             },
             ...weaponArray(
                 {
@@ -780,19 +795,51 @@ const g = require('../gunvals.js');
                         ANGLE: 0,
                         LAYER: 1
                     },
-                    TYPE: "bullet"
+                    TYPE: ["egg", {COLOR: 16, MIRROR_MASTER_ANGLE: true}]
                 }, 12
             ),
+            ...weaponArray(
+                {
+                    POSITION: {
+                        SIZE: 1,
+                        X: 4.5,
+                        Y: 0,
+                        ANGLE: 0,
+                        LAYER: 1
+                    },
+                    TYPE: ["egg", {COLOR: 16, MIRROR_MASTER_ANGLE: true}]
+                }, 6
+            ),
             {
-                POSITION: [3, 18, 0, 0, 1],
-                TYPE: "bullet"
+                POSITION: {SIZE: 3, X: 18, Y: 0, ANGLE: 0, LAYER: 1},
+                TYPE: ["hexagon", {COLOR: 16, MIRROR_MASTER_ANGLE: true}]
             },
+            {
+                POSITION: {SIZE: 2, X: 18, Y: 0, ANGLE: 0, LAYER: 1},
+                TYPE: ["hexagon", {COLOR: {BASE: -1, BRIGHTNESS_SHIFT: 7.5}, MIRROR_MASTER_ANGLE: true}]
+            },
+            {
+                POSITION: {SIZE: 1, X: 0, Y: 0, ANGLE: 180, LAYER: 1},
+                TYPE: ["triangle", {COLOR: 16, MIRROR_MASTER_ANGLE: true}]
+            },
+            ...weaponArray(
+                {
+                    POSITION: {
+                        SIZE: 0.2,
+                        X: 10.65,
+                        Y: 0,
+                        ANGLE: 0,
+                        LAYER: 0
+                    },
+                    TYPE: ["triangle", {COLOR: 16, MIRROR_MASTER_ANGLE: true}]
+                }, 64
+            ),
         ],
     }
 }
 
 Class.dogeisCutTanks = menu("DogeisCut Tanks")
-Class.dogeisCutTanks.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler", "omegaObliterator"]
+Class.dogeisCutTanks.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler", "omegaObliterator", "dogeiscutBoss"]
 Class.addons.UPGRADES_TIER_0.push("dogeisCutTanks");
 
 Class.basic.UPGRADES_TIER_1.push()
