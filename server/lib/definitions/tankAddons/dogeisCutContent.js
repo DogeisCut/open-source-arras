@@ -66,7 +66,7 @@ const g = require('../gunvals.js');
                 event: "collide",
                 handler: ({ instance, other }) => {
                     if (!instance.stickied) {
-                        if (other && other !== instance.master && other !== instance && other.stickied == undefined) {
+                        if (other && other !== instance.master && other !== instance && other.stickied == undefined && other.type != "line") {
                             if (other instanceof bulletEntity) {
                                 return
                             }
@@ -178,27 +178,11 @@ const g = require('../gunvals.js');
             {
                 event: "define",
                 handler: ({ body }) => {
-                    body.zapwireLine = createSpringConstraint(body, body.master)
+                    body.zapwireLine = createLine(body, body.master)
                 },  
             },
         ]
     }
-
-    Class.teatheredDrone = {
-        PARENT: "drone",
-        BODY: {
-            DENSITY: base.DENSITY * 1,
-        },
-        ON: [
-            {
-                event: "define",
-                handler: ({ body }) => {
-                    body.zapwireLine = createSpringConstraint(body, body.master, 150, 0.25, 0.01, false)
-                },  
-            },
-        ]
-    }
-
 }
 
 /* TANKS */{
@@ -451,27 +435,48 @@ const g = require('../gunvals.js');
     }
 
     Class.toverseer = {
-        PARENT: "genericTank",
+        PARENT: "overseer",
         LABEL: "Dog Walker",
-        DANGER: 6,
-        STAT_NAMES: statnames.drone,
-        BODY: {
-            SPEED: 0.9 * base.SPEED,
-            FOV: 1.1 * base.FOV,
-        },
         MAX_CHILDREN: 1,
-        GUNS: weaponArray({
-            POSITION: [6, 12, 1.2, 8, 0, 90, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.overseer]),
-                TYPE: "teatheredDrone",
-                NO_LIMITATIONS: true,
-                AUTOFIRE: true,
-                SYNCS_SKILLS: true,
-                STAT_CALCULATOR: "drone",
-                WAIT_TO_CYCLE: true
+        ON: [
+            {
+                event: "fire",
+                handler: ({ body, child }) => {
+                    child.zapwireLine = createSpringConstraint(child, body, 150, 0.25, 0.01, false)
+                },
             }
-        }, 2)
+        ]
+    }
+
+    Class.grappler = {
+        PARENT: "genericTank",
+        LABEL: "Grappler",
+        GUNS: [
+            {
+                POSITION: {
+                    LENGTH: 18,
+                    WIDTH: 8,
+                    ASPECT: 1,
+                    X: 0,
+                    Y: 0,
+                    ANGLE: 0,
+                    DELAY: 0
+                },
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.pounder]),
+                    NO_LIMITATIONS: true,
+                    TYPE: "sticker",
+                }
+            }
+        ],
+        ON: [
+            {
+                event: "fire",
+                handler: ({ body, child }) => {
+                    child.zapwireLine = createSpringConstraint(child, body, 150, 0.25, 0.01, false)
+                },
+            },
+        ]
     }
 
     Class.softBoxSpawner = {
@@ -542,10 +547,252 @@ const g = require('../gunvals.js');
 			}
 		]
     }
+    Class.omegaObliteratorBullet = {
+        PARENT: 'bullet',
+        TYPE: 'immuneBullet',
+        DRAW_HEALTH: true,
+        IMMUNE_TO_TILES: true,
+        ARENA_CLOSER: true,
+        DANGER: 999,
+        ON: [
+            {
+                event: "define",
+                handler: ({ body }) => {
+                    body.immuneToTiles = true
+                }
+            },
+            {
+                event: "collide",
+                handler: ({ instance, other }) => {
+                    if (other.type == "wall") {
+                        instance.health.amount -= 10
+                        other.health.amount -= 4000
+                        other.settings.drawHealth = true
+                        if (other.isDead()) {
+                            instance.master.sendMessage("You destroyed a wall.")
+                            instance.master.skill.score += 10_000
+                        }
+                    }
+                }
+            }
+        ]
+    }
+    
+    g.omegaObliterator = combineStats([g.basic, g.pounder, g.destroyer, g.annihilator, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, { health: 1, reload: 0.025, recoil: 1, damage: 10, speed: 5, maxSpeed: 100, range: 10 }])
+    //TODO: make look cooler, take insparation from other bigger tanks where everything on the tank is detailed and smaller down to compensate for the size
+    Class.omegaObliterator = {
+        PARENT: "genericTank",
+        LABEL: "Omega Obliterator",
+        //FACING_TYPE: "smoothToTarget",
+        DANGER: 9999,
+        SIZE: 200,
+        // TODO: get rid of this when team colored props are fixed
+        COLOR: "#a81818",
+        SHAKE: [
+            {
+                CAMERA_SHAKE: {
+                    DURATION: 1000,
+                    AMOUNT: 20 * 2,
+                },
+                GUI_SHAKE: {
+                    DURATION: 1000,
+                    AMOUNT: 4 * 2,
+                },
+                APPLY_ON_SHOOT: true,   
+            },
+        ],
+        BODY: {
+            ACCELERATION: base.ACCEL * 1,
+            SPEED: base.SPEED * 0.25,
+            HEALTH: base.HEALTH * 100,
+            DAMAGE: base.DAMAGE * 10,
+            PENETRATION: base.PENETRATION * 1,
+            SHIELD: base.SHIELD * 100,
+            REGEN: base.REGEN * 0.5,
+            FOV: base.FOV * 0.9,
+            DENSITY: base.DENSITY * 10,
+            PUSHABILITY: 0.1,
+            HETERO: 3
+        },
+        GUNS: [ 
+            {
+                POSITION: [8.5, 15, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: g.omegaObliterator,
+                    NO_LIMITATIONS: true,
+                    TYPE: "omegaObliteratorBullet"
+                },
+            },
+            ...(() => {
+                function create(w = 3) {
+                    const resultGuns = []
+                    const splitAmount = 8
+                    for (let i = 0; i < splitAmount; i++) {
+                        
+                        const rangeStart = -6
+                        const rangeEnd = 6
+                        const rangeSpan = rangeEnd - rangeStart
+
+                        const offset = rangeStart + ((i % 13) * rangeSpan) / (splitAmount - 1)
+                        resultGuns.push({
+                            POSITION: [4, w, 1, 11, offset, 0, 0],
+                            PROPERTIES: {
+                                SHOOT_SETTINGS: {
+                                    ...combineStats([g.basic, g.machineGun, g.shotgun, {spray: 4, resist: 100000, speed: 0.3, damage: 0.0, shudder: 8, health: 100000}]),
+                                    ...{reload: g.omegaObliterator.reload},
+                                },
+                                TYPE: ["bullet", {
+                                    ALPHA: 0.5,
+                                    HITS_OWN_TYPE: "never",
+                                    IGNORED_BY_AI: true,
+                                    ARENA_CLOSER: true,
+                                    IS_IMMUNE_TO_TILES: true,
+                                    NO_COLLISIONS: true,
+                                }],
+                            },
+                        })
+                    }
+                    return resultGuns
+                }
+                return [
+                    ...create(3),
+                    ...create(2),
+                    ...create(1),
+                    ...create(1),
+                    ...create(0.5),
+                    ...create(0.5),
+                ]
+            })(),
+            {
+                POSITION: [20.5, 15, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.omegaObliterator, g.fake]),
+                    NO_LIMITATIONS: true,
+                    TYPE: "omegaObliteratorBullet"
+                },
+            },
+            {
+                POSITION: [18, 10, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.omegaObliterator, g.fake]),
+                    NO_LIMITATIONS: true,
+                    TYPE: "omegaObliteratorBullet"
+                },
+            },
+            
+            {
+                POSITION: [8, 15, -1.3, 3, 0, 0, 0],
+            },
+            {
+                POSITION: [18, 7, -0.3, 3, 0, 0, 0],
+            },
+
+            {
+                POSITION: [4, 4, 0.001, 10, 0, -60, 0],
+            },
+            {
+                POSITION: [4, 4, 0.001, 10, 0, -37.5, 0],
+            },
+            {
+                POSITION: [4, 4, 0.001, 10, 0, 60, 0],
+            },
+            {
+                POSITION: [4, 4, 0.001, 10, 0, 37.5, 0],
+            },
+            {
+                POSITION: [8, 4, 0.001, 10, 0, 0, 0],
+            },
+
+            {
+                POSITION: [2, 2, 0.001, 10, 0, -60, 0],
+            },
+            {
+                POSITION: [2, 2, 0.001, 10, 0, -37.5, 0],
+            },
+            {
+                POSITION: [2, 2, 0.001, 10, 0, 60, 0],
+            },
+            {
+                POSITION: [2, 2, 0.001, 10, 0, 37.5, 0],
+            },
+            {
+                POSITION: [4, 2, 0.001, 10, 0, 0, 0],
+            },
+
+            {
+                POSITION: [0.5, 1, 0.001, 7.8, 19, -90, 0],
+            },
+            {
+                POSITION: [0.5, 1, 0.001, 7.8, -19, 90, 0],
+            },
+            {
+                POSITION: [0.5, 1, 0.001, 7.8, 17, -90, 0],
+            },
+            {
+                POSITION: [0.5, 1, 0.001, 7.8, -17, 90, 0],
+            },
+            {
+                POSITION: [0.5, 1, 0.001, 7.8, 15, -90, 0],
+            },
+            {
+                POSITION: [0.5, 1, 0.001, 7.8, -15, 90, 0],
+            },
+            {
+                POSITION: [0.5, 1, 0.001, 7.8, 13, -90, 0],
+            },
+            {
+                POSITION: [0.5, 1, 0.001, 7.8, -13, 90, 0],
+            },
+            {
+                POSITION: [0.5, 1, 0.001, 7.8, 11, -90, 0],
+            },
+            {
+                POSITION: [0.5, 1, 0.001, 7.8, -11, 90, 0],
+            },
+        ],
+        PROPS: [
+            {
+                POSITION: [21, 0, 0, 180, 0],
+                TYPE: ["bullet"]
+            },
+            {
+                POSITION: [13 + 1, 0, 0, 180, 1],
+                TYPE: "bullet"
+            },
+            {
+                POSITION: [13, 0, 0, 180, 1],
+                TYPE: ["bullet", {COLOR: "#a81818"}]
+            },
+            {
+                POSITION: [(80/20) + 1, 0, 0, 180, 1],
+                TYPE: "bullet"
+            },
+            {
+                POSITION: [80/20, 0, 0, 180, 1],
+                TYPE: ["bullet", {COLOR: "#a81818"}]
+            },
+            ...weaponArray(
+                {
+                    POSITION: {
+                        SIZE: 1,
+                        X: 8.5,
+                        Y: 0,
+                        ANGLE: 0,
+                        LAYER: 1
+                    },
+                    TYPE: "bullet"
+                }, 12
+            ),
+            {
+                POSITION: [3, 18, 0, 0, 1],
+                TYPE: "bullet"
+            },
+        ],
+    }
 }
 
 Class.dogeisCutTanks = menu("DogeisCut Tanks")
-Class.dogeisCutTanks.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator"]
+Class.dogeisCutTanks.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler", "omegaObliterator"]
 Class.addons.UPGRADES_TIER_0.push("dogeisCutTanks");
 
 Class.basic.UPGRADES_TIER_1.push()
