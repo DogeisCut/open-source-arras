@@ -579,7 +579,11 @@ const g = require('../gunvals.js');
     }
     
     g.omegaObliterator = combineStats([g.basic, g.pounder, g.destroyer, g.annihilator, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, { health: 1, reload: 0.025, recoil: 1, damage: 10, speed: 5, maxSpeed: 100, range: 10 }])
-    //TODO: make look cooler, take insparation from other bigger tanks where everything on the tank is detailed and smaller down to compensate for the size
+    //TODO: wall fragments
+    //TODO: distinguish between rocks and walls
+    //TODO: tile destruction
+    //TODO: change score/health for walls and rocks based on size
+    //TODO: really slow aim turn
     Class.omegaObliterator = {
         PARENT: "genericTank",
         LABEL: "Omega Obliterator",
@@ -600,16 +604,16 @@ const g = require('../gunvals.js');
             },
         ],
         BODY: {
-            ACCELERATION: base.ACCEL * 1,
+            ACCELERATION: base.ACCEL * 0.75,
             SPEED: base.SPEED * 0.25,
-            HEALTH: base.HEALTH * 100,
-            DAMAGE: base.DAMAGE * 10,
-            PENETRATION: base.PENETRATION * 1,
-            SHIELD: base.SHIELD * 100,
+            HEALTH: base.HEALTH * 200,
+            DAMAGE: base.DAMAGE * 20,
+            PENETRATION: base.PENETRATION * 20,
+            SHIELD: base.SHIELD * 200,
             REGEN: base.REGEN * 0.5,
             FOV: base.FOV * 0.9,
-            DENSITY: base.DENSITY * 10,
-            PUSHABILITY: 0.1,
+            DENSITY: base.DENSITY * 20,
+            PUSHABILITY: 0.2,
             HETERO: 3
         },
         GUNS: [ 
