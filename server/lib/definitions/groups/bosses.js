@@ -2310,6 +2310,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.annihilator, {size: 1, reload: 3, recoil: 5}]),
                 TYPE: ["dogeiscutBomb"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
             }
         }, {
@@ -2324,6 +2325,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_red"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'red'
             }
@@ -2332,6 +2334,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_orange"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'orange'
             }
@@ -2340,6 +2343,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_yellow"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'yellow'
             }
@@ -2348,6 +2352,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_green"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'green'
             }
@@ -2356,6 +2361,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_cyan"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'cyan'
             }
@@ -2364,6 +2370,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_blue"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'blue'
             }
@@ -2372,6 +2379,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_purple"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'purple'
             }
@@ -2383,6 +2391,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_red"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'red'
             }
@@ -2391,6 +2400,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_orange"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'orange'
             }
@@ -2399,6 +2409,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_yellow"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'yellow'
             }
@@ -2407,6 +2418,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_green"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'green'
             }
@@ -2415,6 +2427,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_cyan"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'cyan'
             }
@@ -2423,6 +2436,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_blue"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'blue'
             }
@@ -2431,6 +2445,7 @@ Class.dogeiscutBoss = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.sidewinder, {speed: 3, range: 0.8, reload: 4}]),
                 TYPE: ["dogeiscutMissile_purple"],
+                NO_LIMITATIONS: true,
                 STAT_CALCULATOR: "sustained",
                 COLOR: 'purple'
             }
