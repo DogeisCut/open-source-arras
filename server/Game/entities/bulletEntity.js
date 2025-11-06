@@ -450,7 +450,7 @@ class bulletEntity { // Basically an (Entity) but with heavy limitations to impr
                 break;
             case 'smoothWithMotion':
             case 'looseWithMotion':
-                this.facing += util.loopSmooth(this.facing, this.velocity.direction, 4 / global.gameManager.roomSpeed);
+                this.facing += util.loopSmooth(this.facing, this.velocity.direction, (this.facingTypeArgs.smoothness ?? 4) / global.gameManager.roomSpeed);
                 break;
             case 'withTarget':
             case 'toTarget':
@@ -462,7 +462,7 @@ class bulletEntity { // Basically an (Entity) but with heavy limitations to impr
             case 'looseWithTarget':
             case 'looseToTarget':
             case 'smoothToTarget':
-                this.facing += util.loopSmooth(this.facing, Math.atan2(t.y, t.x), 4 / global.gameManager.roomSpeed);
+                this.facing += util.loopSmooth(this.facing, Math.atan2(t.y, t.x), (this.facingTypeArgs.smoothness ?? 4) / global.gameManager.roomSpeed);
                 break;
             case "noFacing":
                 if (this.lastSavedFacing !== this.facing) this.facing = this.facingTypeArgs.angle ?? 0;
