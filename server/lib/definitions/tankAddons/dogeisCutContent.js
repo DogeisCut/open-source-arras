@@ -587,7 +587,8 @@ const g = require('../gunvals.js');
     Class.omegaObliterator = {
         PARENT: "genericTank",
         LABEL: "Omega Obliterator",
-        FACING_TYPE: ["smoothToTarget", { speed: 30 }],
+        FACING_TYPE: ["smoothToTarget", { smoothness: 100 }],
+        SYNC_WITH_TANK: true,
         DANGER: 9999,
         SIZE: 200,
         SHAKE: [
