@@ -302,7 +302,7 @@ const g = require('../gunvals.js');
             }
         ],
         TURRETS: [{
-            POSITION: [28, 0, 0, 45, 0, 0],
+            POSITION: [8, 0, 0, 45, 0, 1],
             TYPE: ["disruptorDeco", { MIRROR_MASTER_ANGLE: true }]
         }]
     }
@@ -363,19 +363,19 @@ const g = require('../gunvals.js');
         PARENT: "genericTank",
         LABEL: 'Radar',
         GUNS: [ {
-                POSITION: [ 18, 8, 1, 0, 0, -54.73698827040275, 0, ],
+                POSITION: [ 18, 8, 1, 0, 0, -55, 0, ],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.flankGuard]),
                     TYPE: "setTrap",
                 }, }, {
-                POSITION: [ 18, 8, 1, 0, 0, 54.73698827040275, 0.2, ],
+                POSITION: [ 18, 8, 1, 0, 0, 55, 0.2, ],
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.flankGuard]),
                     TYPE: "setTrap",
                 }, }, {
-                POSITION: [ 2, 8, 1.5, 17, 0, -53.74616226255521, 0, ],
+                POSITION: [ 2, 8, 1.5, 17, 0, -55, 0, ],
                 }, {
-                POSITION: [ 2, 8, 1.5, 17, 0, 53.74616226255521, 0, ],
+                POSITION: [ 2, 8, 1.5, 17, 0, 55, 0, ],
                 }, {
                 POSITION: [ 13, 7, 1, 7, 0, 0, 0.9, ],
                 PROPERTIES: {
