@@ -1257,6 +1257,7 @@ import * as socketStuff from "./socketinit.js";
                     // Circle
                     let fillcolor = context.fillStyle;
                     let strokecolor = context.strokeStyle;
+                    strokecolor = 0  // DOGEISCUT FART
                     let borderRadius = context.globalAlpha < 1 ? 4 : 2;
                     switch (hasGlow) {
                         case true:

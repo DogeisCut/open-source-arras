@@ -70,6 +70,9 @@ class Prop { // Used for split upgrades only
         if (set.COLOR != null) {
             this.color.interpret(set.COLOR);
         }
+        if (set.BORDER_COLOR != null) {
+            this.borderColor.interpret(set.BORDER_COLOR);
+        }
         if (set.STROKE_WIDTH != null) this.strokeWidth = set.STROKE_WIDTH
         if (set.BORDERLESS != null) this.borderless = set.BORDERLESS;
         if (set.DRAW_FILL != null) this.drawFill = set.DRAW_FILL;
@@ -96,6 +99,7 @@ class Prop { // Used for split upgrades only
             mirrorMasterAngle: this.settings.mirrorMasterAngle,
             layer: this.bound.layer,
             color: this.color.compiled,
+            borderColor: this.borderColor.compiled,
             strokeWidth: this.strokeWidth,
             borderless: this.borderless,
             drawFill: this.drawFill,
@@ -160,6 +164,7 @@ class Entity extends EventEmitter {
         this.children = [];
         this.bulletchildren = [];
         this.color = new Color(16);
+        this.borderColor = null;
         this.glow = { radius: null, color: new Color(-1).compiled, alpha: 1, recursion: 1 }
         this.confinement = { xMin: 0, xMax: global.gameManager.room.width, yMin: 0, yMax: global.gameManager.room.height };
         this.firingArc = [0, 360];

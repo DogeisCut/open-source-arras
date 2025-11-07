@@ -8,6 +8,7 @@ class MockupEntityGun {
             allowBrightnessInvert: false,
         };
         this.color = '16 0 1 0 false';
+        this.borderColor = null;
         this.alpha = 1;
         this.strokeWidth = 1;
         this.borderless = false;
@@ -28,6 +29,21 @@ class MockupEntityGun {
                         allowBrightnessInvert: info.PROPERTIES.COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
                     };
                 this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+            }
+            if (info.PROPERTIES.BORDER_COLOR != null) {
+                if (typeof info.PROPERTIES.BORDER_COLOR === "number" || typeof info.PROPERTIES.BORDER_COLOR === "string") {
+                    if (!isNaN(info.PROPERTIES.BORDER_COLOR) && !isNaN(parseFloat(info.PROPERTIES.BORDER_COLOR)) || /^[a-zA-Z]*$/.test(info.PROPERTIES.BORDER_COLOR))
+                        this.borderColorUnboxed.base = info.PROPERTIES.BORDER_COLOR; 
+                }
+                else if (typeof info.PROPERTIES.BORDER_COLOR === "object")
+                    this.borderColorUnboxed = {
+                        base: info.PROPERTIES.BORDER_COLOR.BASE ?? 16,
+                        hueShift: info.PROPERTIES.BORDER_COLOR.HUE_SHIFT ?? 0,
+                        saturationShift: info.PROPERTIES.BORDER_COLOR.SATURATION_SHIFT ?? 1,
+                        brightnessShift: info.PROPERTIES.BORDER_COLOR.BRIGHTNESS_SHIFT ?? 0,
+                        allowBrightnessInvert: info.PROPERTIES.BORDER_COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
+                    };
+                this.borderColor = this.borderColorUnboxed.base + " " + this.borderColorUnboxed.hueShift + " " + this.borderColorUnboxed.saturationShift + " " + this.borderColorUnboxed.brightnessShift + " " + this.borderColorUnboxed.allowBrightnessInvert;
             }
             if (info.PROPERTIES.ALPHA != null) this.alpha = info.PROPERTIES.ALPHA;
             if (info.PROPERTIES.STROKE_WIDTH != null) this.strokeWidth = info.PROPERTIES.STROKE_WIDTH;
@@ -234,6 +250,19 @@ class MockupEntity {
                     allowBrightnessInvert: set.COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
                 };
             this.color = this.colorUnboxed.base + " " + this.colorUnboxed.hueShift + " " + this.colorUnboxed.saturationShift + " " + this.colorUnboxed.brightnessShift + " " + this.colorUnboxed.allowBrightnessInvert;
+        }
+        if (set.BORDER_COLOR != null) {
+           if (typeof set.BORDER_COLOR === "number" || typeof set.BORDER_COLOR === 'string')
+                this.borderColorUnboxed.base = set.COLOR;
+            else if (typeof set.BORDER_COLOR === "object")
+                this.borderColorUnboxed = {
+                    base: set.BORDER_COLOR.BASE ?? 16,
+                    hueShift: set.BORDER_COLOR.HUE_SHIFT ?? 0,
+                    saturationShift: set.BORDER_COLOR.SATURATION_SHIFT ?? 1,
+                    brightnessShift: set.BORDER_COLOR.BRIGHTNESS_SHIFT ?? 0,
+                    allowBrightnessInvert: set.BORDER_COLOR.ALLOW_BRIGHTNESS_INVERT ?? false,
+                };
+            this.borderColor = this.borderColorUnboxed.base + " " + this.borderColorUnboxed.hueShift + " " + this.borderColorUnboxed.saturationShift + " " + this.borderColorUnboxed.brightnessShift + " " + this.borderColorUnboxed.allowBrightnessInvert;
         }
         if (set.UPGRADE_COLOR) this.upgradeColor = set.UPGRADE_COLOR + " 0 1 0 false";
         if (set.GLOW != null) {

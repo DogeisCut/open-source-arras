@@ -348,6 +348,7 @@ const GunContainer = n => {
             isUpdated: true,
             configLoaded: false,
             color: "",
+            borderColor: "",
             borderless: false, 
             drawFill: true, 
             drawAbove: false,
@@ -366,6 +367,7 @@ const GunContainer = n => {
         getConfig: () => a.map(g => {
             return {
                 color: g.color,
+                borderColor: g.borderColor,
                 borderless: g.borderless,
                 alpha: g.alpha,
                 strokeWidth: g.strokeWidth,
@@ -384,6 +386,7 @@ const GunContainer = n => {
             if (!g.configLoaded) {
                 g.configLoaded = true;
                 g.color = c.color;
+                g.borderColor = c.borderColor;
                 g.borderless = c.borderless; 
                 g.alpha = c.alpha;
                 g.strokeWidth = c.strokeWidth;
@@ -502,6 +505,7 @@ const process = (z = {}) => {
             z.twiggle = get.next();
             z.layer = get.next();
             z.color = get.next();
+            z.borderColor = get.next();
             z.borderless = get.next();
             z.drawFill = get.next();
         }
@@ -587,6 +591,7 @@ const process = (z = {}) => {
         let time = get.next(),
             power = get.next(),
             color = get.next(),
+            borderColor = get.next(),
             alpha = get.next(),
             strokeWidth = get.next(),
             borderless = get.next(),
@@ -598,7 +603,7 @@ const process = (z = {}) => {
             angle = get.next(),
             direction = get.next(),
             offset = get.next();
-        z.guns.setConfig(i, {color, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
+        z.guns.setConfig(i, {color, borderColor, alpha, strokeWidth, borderless, drawFill, drawAbove, length, width, aspect, angle, direction, offset}); // Load gun config into container
         if (time > global.player.lastUpdate - global.metrics.rendergap) z.guns.fire(i, power); // Shoot it
     }
     // Update turrets

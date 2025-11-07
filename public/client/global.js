@@ -6,6 +6,7 @@ const missingMockup = {
     x: 0,
     y: 0,
     color: "mirror 0 1 0 true",
+    borderColor: null,
     strokeWidth: 1,
     upgradeColor: null,
     glow: {

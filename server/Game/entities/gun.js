@@ -61,6 +61,9 @@ class Gun extends EventEmitter {
             if (info.PROPERTIES.COLOR != null) {
                 this.color.interpret(info.PROPERTIES.COLOR);
             }
+            if (info.PROPERTIES.BORDER_COLOR != null) {
+                this.borderColor.interpret(info.PROPERTIES.BORDER_COLOR);
+            }
             this.noentitylimit = (info.PROPERTIES.NO_LIMITATIONS == null) ? false : info.PROPERTIES.NO_LIMITATIONS;
             if (info.PROPERTIES.ALPHA != null) this.alpha = info.PROPERTIES.ALPHA;
             if (info.PROPERTIES.STROKE_WIDTH != null) this.strokeWidth = info.PROPERTIES.STROKE_WIDTH;
@@ -574,6 +577,7 @@ class Gun extends EventEmitter {
         return {
             ...this.lastShot, 
             color: this.color.compiled,
+            borderColor: this.borderColor.compiled,
             alpha: this.alpha,
             strokeWidth: this.strokeWidth,
             borderless: this.borderless, 

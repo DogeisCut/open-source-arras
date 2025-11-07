@@ -278,6 +278,7 @@ const util = (function() {
                 size: mainMockup.size,
                 realSize: mainMockup.realSize,
                 color: trueColor,
+                borderColor: mainMockup.borderColor ? mainMockup.borderColor : null,
                 borderless: mainMockup.borderless,
                 drawFill: mainMockup.drawFill,
                 upgradeColor: mainMockup.upgradeColor ? mainMockup.upgradeColor : null,
@@ -322,6 +323,7 @@ const util = (function() {
                     getConfig: () => guns.map(g => {
                         return {
                             color: g.color,
+                            borderColor: g.color,
                             alpha: g.alpha,
                             strokeWidth: g.strokeWidth,
                             borderless: g.borderless, 
@@ -340,6 +342,7 @@ const util = (function() {
                 turrets: turrets.map((t) => {
                     let o = util.getEntityImageFromMockup(t.index);
                     o.color = t.color;
+                    o.borderColor = t.borderColor;
                     o.borderless = t.borderless;
                     o.drawFill = t.drawFill;
                     o.realSize = o.realSize / o.size * mainMockup.size * t.sizeFactor;
