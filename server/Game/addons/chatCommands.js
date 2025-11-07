@@ -264,6 +264,22 @@ let commands = [
             } else sendAvailableDevCommandsMessage();
         },
     },
+    {
+        command: ["spawn", "create"],
+        description: "Spawn an entity at your aim position.",
+        level: 3,
+        run: ({ socket, args, gameManager }) => {
+            //ensureIsClass
+        }
+    },
+    {
+        command: ["define", "redefine", "change"],
+        description: "Change into the desired definition.",
+        level: 3,
+        run: ({ socket, args, gameManager }) => {
+            //ensureIsClass
+        }
+    },
 ]
 
 /** COMMANDS RUN FUNCTION **/

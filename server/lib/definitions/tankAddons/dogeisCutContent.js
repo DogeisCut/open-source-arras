@@ -547,15 +547,132 @@ const g = require('../gunvals.js');
 			}
 		]
     }
-}
 
-Class.auto5 = makeRadialAuto("omegaObliterator", {isTurret: true, danger: 7, label: "Auto-5", count: 5})
+    Class.random = {
+        PARENT: "genericTank",
+        LABEL: "Random",
+        DANGER: 4,
+        ON: [
+            {
+                event: "define",
+                handler: ({ body }) => {
+                    if (!body.seed) {
+                        body.seed ??= Math.random()
+                        let seed = body.seed
+
+                        let seedFuncs = {}
+
+                        seedFuncs.random = function () {
+                            seed = (seed * 9301 + 49297) % 233280
+						    return seed / 233280
+                        }
+                        seedFuncs.random_range = function(min, max) {
+                            return seedFuncs.random() * (max - min) + min;
+                        }
+
+                        let points = 100
+                        let cart = []
+                        let set = {}
+
+                        function gun(preset, position, stats, settings) {
+                            switch (preset) {
+                                case "trap":
+
+                                default:
+                                    return {
+                                        POSITION: position,
+                                        PROPERTIES: {
+                                            SHOOT_SETTINGS: combineStats([g.basic, stats]),
+                                            TYPE: "bullet",
+                                        }
+                                    }
+                            }
+                        }
+
+                        let shop = [
+                            {
+                                cost: 1,
+                                item: (extraSpendings) => {
+                                    set.BODY ??= {}
+                                    set.BODY.FOV ??= base.FOV
+                                    set.BODY.FOV += 0.2
+                                },
+                                chanceMultiplier: 0.2
+                            },
+                            {
+                                cost: 25,
+                                item: (extraSpendings) => {
+                                    // guns are gonna need a lot of paramters/subpurchasables
+                                    // for instance, symetry, and if its not symetric, a only place the gun on front or back
+                                    // and also x + y offsets
+                                    // as well as the gun types, and their paramters (drone max count)
+                                    // ensure guns dont overlap (at least in a non visible way)
+                                    // and of course the various stats that can be added.
+                                    set.GUNS ??= []
+                                    set.GUNS.push(
+                                        gun("",{
+                                            LENGTH: seedFuncs.random_range(12, 23),
+                                            WIDTH: seedFuncs.random_range(4, 15),
+                                            ASPECT: seedFuncs.random_range(-2, 2),
+                                            X: 0,
+                                            Y: 0,
+                                            ANGLE: 0,
+                                            DELAY: 0
+                                        },{})
+                                    )
+                                },
+                                chanceMultiplier: 1
+                            }
+                        ]
+                        function canBuy(index) {
+                            return points >= shop[index].cost
+                        }
+                        function buy(index, extraSpendings) {
+                            const shopItem = shop[index]
+                            if (canBuy(index)) {
+                                points -= shopItem
+                                cart.push({index, extraSpendings})
+                                shopItem.item(extraSpendings)
+                            }
+                        }
+                        function splurge() {
+                            let safety = 5000
+                            while (points > 0 && safety-- > 0) {
+                                let weighted = []
+                                let total = 0
+                                for (let i = 0; i < shop.length; i++) {
+                                    let weight = shop[i].chanceMultiplier ?? 1
+                                    if (canBuy(i)) {
+                                        weighted.push({ i, weight })
+                                        total += weight
+                                    }
+                                }
+                                if (weighted.length === 0) break
+                                let choice = seedFuncs.random() * total
+                                for (let item of weighted) {
+                                    choice -= item.weight
+                                    if (choice <= 0) {
+                                        buy(item.i)
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                        splurge()
+                        set.LABEL = `Random (Seed ${body.seed})`
+                        body.define(set)
+                    } 
+                },  
+            },
+        ]
+    }
+}
 
 Class.dogeisCutTanks = menu("DogeisCut Tanks")
 Class.dogeisCutTanks.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler", "omegaObliterator", "dogeiscutBoss"]
 Class.addons.UPGRADES_TIER_0.push("dogeisCutTanks");
 
-Class.basic.UPGRADES_TIER_1.push()
+Class.basic.UPGRADES_TIER_1.push("random")
     Class.basic.UPGRADES_TIER_2.push()
         Class.smasher.UPGRADES_TIER_3.push("irradiator")
         Class.healer.UPGRADES_TIER_3.push()

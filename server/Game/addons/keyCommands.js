@@ -815,6 +815,64 @@ function init() {
                 }
             }
         },
+        {
+            code: "r",
+            name: "Become",
+            keys: [[[82, "R"]]],
+            level: 1,
+            operatorAccess: true,
+            run: ({ socket, player }) => {
+                let become = null;
+                selectedEntities(player, (o) => {
+                    if (o instanceof Entity) {
+                        function removeAllControllersOfType(entity, controllerType) {
+                            entity.controllers = entity.controllers.filter(existingController => existingController.constructor !== controllerType);
+                        }
+                        if (o.bond) {
+                            //o.settings.drawShape = true
+                            return
+                        }
+                        let body = player.body;
+                        player.body = o;
+                        player.body.become(player);
+                        //this.addController(new ioTypes.listenToPlayer(this, { player, static: dom })); // Make it listen.
+                        removeAllControllersOfType(body, ioTypes.listenToPlayer)
+                        body.sendMessage = (message) => { }
+                        body.kick = (reason) => { }
+                        //body.kill()
+                        become = o
+                        return;
+                    }
+                    
+                });
+                if (become) {
+                    socket.talk( "m", 5_000, `You have become ${become.label}.`);
+                } else {
+                    socket.talk("m", 3_000, "You haven't become any entity!");
+                }
+            },
+        },
+        
+        {
+            code: "f",
+            name: "Assimilate",
+            keys: [[[70, "F"]]],
+            level: 1,
+            operatorAccess: true,
+            run: ({ socket, player }) => {
+                let assimilate = 0;
+                selectedEntities(player, (o) => {
+                    let definition = player.body.label.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
+                    o.define(definition)
+                    assimilate++;
+                });
+                if (assimilate) {
+                    socket.talk( "m", 5_000, `You have assimilated ${assimilate} entit${assimilate === 1 ? "y" : "ies"}.`);
+                } else {
+                    socket.talk( "m", 3_000, "You haven't assimilated any entity!");
+                }
+            },
+        },
     ];
     global.runKeyCommand = (socket, keyCodes) => {
         if (!socket?.player?.body) return 1;

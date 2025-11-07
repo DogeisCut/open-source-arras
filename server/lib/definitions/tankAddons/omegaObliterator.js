@@ -42,7 +42,7 @@ Class.omegaObliterator = {
     FACING_TYPE: ["smoothToTarget", { smoothness: 100 }],
     SYNC_WITH_TANK: true,
     DANGER: 9999,
-    AUTOSPIN_MULTIPLIER: 0.25,
+    AUTOSPIN_MULTIPLIER: 0.1,
     SIZE: 200,
     SHAKE: [
         {
