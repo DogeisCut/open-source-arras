@@ -827,8 +827,7 @@ class Entity extends EventEmitter {
             offset: boundData.offset,
             sizeFactor: boundData.size,
             twiggle: forceTwiggle.includes(this.facingType) || this.eastereggs.braindamage || 
-                this.settings.connectChildrenOnCamera || (this.facingType === "locksFacing" && this.control.alt) ||
-                this.syncWithTank,
+                    this.settings.connectChildrenOnCamera || (this.facingType === "locksFacing" && this.control.alt),
             layer: layerValue,
             color: this.color.compiled,
             borderless: this.borderless,
@@ -1058,7 +1057,7 @@ class Entity extends EventEmitter {
                 if (t && this.control.fire) this.facing = Math.atan2(t.y, t.x); else this.facing += (this.facingTypeArgs.speed ?? 0.05) / global.gameManager.runSpeed;
                 break;
             case 'turnWithSpeed':
-                this.facing += this.velocity.length / 90 * Math.PI / global.gameManager.roomSpeed * (this.facingTypeArgs.multiplier ?? 4);
+                this.facing += this.velocity.length / 90 * Math.PI / global.gameManager.roomSpeed * (this.facingTypeArgs.multiplier ?? 1);
                 break;
             case 'withMotion':
                 this.facing = this.velocity.direction;
