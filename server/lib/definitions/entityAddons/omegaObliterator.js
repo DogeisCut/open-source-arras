@@ -33,7 +33,36 @@ Class.omegaObliteratorBullet = {
     ]
 }
 
-g.omegaObliterator = combineStats([g.basic, g.pounder, g.destroyer, g.annihilator, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, g.destroyer, { health: 1, reload: 0.025, recoil: 1, damage: 10, speed: 5, maxSpeed: 100, range: 10 }])
+g.omegaObliterator = {
+  reload: 83.31090195456005,
+  recoil: 599.8384940728321,
+  shudder: 0.0001953125,
+  size: 1,
+  health: 512,
+  damage: 4.997724308100001,
+  pen: 5.159780351999999,
+  speed: 8.232685391250001,
+  maxSpeed: 0.15625,
+  range: 10,
+  density: 768,
+  spray: 15,
+  resist: 22635.449999999997
+}
+g.omegaObliteratorParticles = {
+  reload: g.omegaObliterator.reload,
+  recoil: 0.44799999999999995,
+  shudder: 1.36,
+  size: 1.5,
+  health: 70000,
+  damage: 0,
+  pen: 0.8,
+  speed: 2.6999999999999997,
+  maxSpeed: 0.48,
+  range: 1,
+  density: 1.2,
+  spray: 180,
+  resist: 100000
+}
 //TODO: wall fragments
 //TODO: tile destruction
 Class.omegaObliterator = {
@@ -93,10 +122,7 @@ Class.omegaObliterator = {
                     resultGuns.push({
                         POSITION: [4, w, 1, 11, offset, 0, 0],
                         PROPERTIES: {
-                            SHOOT_SETTINGS: {
-                                ...combineStats([g.basic, g.machineGun, g.shotgun, {spray: 4, resist: 100000, speed: 0.3, damage: 0.0, shudder: 8, health: 100000}]),
-                                ...{reload: g.omegaObliterator.reload},
-                            },
+                            SHOOT_SETTINGS: g.omegaObliteratorParticles,
                             TYPE: ["bullet", {
                                 ALPHA: 0.5,
                                 HITS_OWN_TYPE: "never",
