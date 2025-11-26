@@ -712,7 +712,8 @@ class Entity extends EventEmitter {
             facing: this.facing,
             vfacing: this.vfacing,
             twiggle: forceTwiggle.includes(this.facingType) || this.eastereggs.braindamage || 
-                    this.settings.connectChildrenOnCamera || (this.facingType === "locksFacing" && this.control.alt),
+                    this.settings.connectChildrenOnCamera || (this.facingType === "locksFacing" && this.control.alt) ||
+                    this.syncWithTank,
             layer: layerValue,
             color: this.color.compiled,
             borderless: this.borderless,

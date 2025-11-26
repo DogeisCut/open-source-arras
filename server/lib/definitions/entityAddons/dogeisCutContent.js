@@ -1,9 +1,13 @@
-const { combineStats, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeRadialAuto, weaponArray, makeTurret, addAura, menu, dereference } = require('../facilitators.js');
+const { combineStats, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeRadialAuto, weaponArray, makeTurret, addAura, makeMenu, dereference } = require('../facilitators.js');
 const { base, statnames, dfltskl, smshskl } = require('../constants.js');
 const { createLine, createSpringConstraint } = require('./constraints.js');
 const g = require('../gunvals.js');
 
-/* Projectiles */{
+/* Config */
+
+const enableUnfinishedTanks = false
+
+projectiles: {
     Class.disruptorDeco = makeDeco(0)
     Class.disruptorBullet = {
         PARENT: "bullet",
@@ -185,7 +189,7 @@ const g = require('../gunvals.js');
     }
 }
 
-/* TANKS */{
+tanks: {
     Class.jetrusher = {
         PARENT: "genericTank",
         LABEL: "Jetrusher",
@@ -668,11 +672,19 @@ const g = require('../gunvals.js');
     }
 }
 
-Class.dogeisCutTanks = menu("DogeisCut Tanks")
-Class.dogeisCutTanks.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler", "omegaObliterator", "dogeiscutBoss"]
-Class.addons.UPGRADES_TIER_0.push("dogeisCutTanks");
+bosses: {
 
-Class.basic.UPGRADES_TIER_1.push("random")
+}
+
+Class.menu_dogeisCutTanks = makeMenu("DogeisCut Tanks")
+Class.menu_dogeisCutTanks.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler", "omegaObliterator", "dogeiscutBoss"]
+Class.menu_addons.UPGRADES_TIER_0.push("menu_dogeisCutTanks");
+
+
+Class.menu_dogeisCutTanks_tests = makeMenu("Tests")
+Class.menu_dogeisCutTanks_tests.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler", "omegaObliterator", "dogeiscutBoss"]
+
+Class.basic.UPGRADES_TIER_1.push()
     Class.basic.UPGRADES_TIER_2.push()
         Class.smasher.UPGRADES_TIER_3.push("irradiator")
         Class.healer.UPGRADES_TIER_3.push()
@@ -721,7 +733,12 @@ Class.basic.UPGRADES_TIER_1.push("random")
         Class.builder.UPGRADES_TIER_3.push("radar")
         Class.triTrapper.UPGRADES_TIER_3.push("boobyTrapper")
         Class.trapGuard.UPGRADES_TIER_3.push()
-        Class.autoTrapper.UPGRADES_TIER_3.push()
-    
+
     Class.desmos.UPGRADES_TIER_2.push()
         Class.helix.UPGRADES_TIER_3.push()
+
+if (enableUnfinishedTanks) {
+
+Class.basic.UPGRADES_TIER_1.push("random")
+
+}
