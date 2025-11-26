@@ -3,4 +3,5 @@
 `LA3T` = Custom wall collisions\
 `PR2000` = Implemented `worker_threads`\
 `Excel` = Implemented Clan Wars(Reworked by the head developer), Manhunt\
-`DenisC!!!` = Implemented accurated growth curve
+`DenisC!!!` = Implemented accurated growth curve\
+`kuoworic` = Extracted and dumped accurate mockups
