@@ -76,25 +76,6 @@ Class.gravel = {
     SIZE: 16,
     SHAPE: -7
 }
-Class.wall = {
-    PARENT: "rock",
-    LABEL: "Wall",
-    SIZE: 25,
-    SHAPE: 4,
-    ANGLE: 0,
-    FACING_TYPE: ["noFacing", { angle: Math.PI / 2 }],
-    WALL_TYPE: 1,
-    VARIES_IN_SIZE: false
-}
-Class.eyewall = {
-    PARENT: "wall",
-    PROPS: [
-        {
-            POSITION: [14, 0, 0, 0, 360, 1],
-            TYPE: "eyeturret"
-        }
-    ]
-}
 Class.moon = {
     PARENT: "rock",
     LABEL: "Moon",
@@ -1092,6 +1073,11 @@ Class.rcs = {
             },
         }
     ],
+}
+
+// SANDBOX
+Class.selectionOrb = {
+    COLOR: "white"
 }
 
 // BOTS
