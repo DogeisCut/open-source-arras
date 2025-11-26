@@ -677,12 +677,18 @@ bosses: {
 }
 
 Class.menu_dogeisCutTanks = makeMenu("DogeisCut Tanks")
-Class.menu_dogeisCutTanks.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler", "omegaObliterator", "dogeiscutBoss"]
+Class.menu_dogeisCutTanks.UPGRADES_TIER_0 = ["menu_dogeisCutTanks_tests", "menu_dogeisCutTanks_fun", "menu_dogeisCutTanks_bosses"]
 Class.menu_addons.UPGRADES_TIER_0.push("menu_dogeisCutTanks");
 
+    Class.menu_dogeisCutTanks_tests = makeMenu("Tests")
+    Class.menu_dogeisCutTanks_tests.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler"]
 
-Class.menu_dogeisCutTanks_tests = makeMenu("Tests")
-Class.menu_dogeisCutTanks_tests.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler", "omegaObliterator", "dogeiscutBoss"]
+    Class.menu_dogeisCutTanks_fun = makeMenu("Fun")
+    Class.menu_dogeisCutTanks_fun.UPGRADES_TIER_0 = ["omegaObliterator"]
+    
+    Class.menu_dogeisCutTanks_bosses = makeMenu("Bosses")
+    Class.menu_dogeisCutTanks_bosses.UPGRADES_TIER_0 = ["dogeiscutBoss"]
+
 
 Class.basic.UPGRADES_TIER_1.push()
     Class.basic.UPGRADES_TIER_2.push()
