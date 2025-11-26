@@ -634,7 +634,7 @@ class socketManager {
                     socket.status.lastTank = player.body.index;
                     this.sendMockup(player.body.index, socket);
                     for (let i of player.body.rerootUpgradeTree.split("_")) {
-                        let ind = Class[i].index;
+                        let ind = Class[i].index; // This bit breaks split upgrades (upgrade to dev-dev in testing or the dreads v2 branch to see this bug)
                         let mockup = mockupData.find(o => o.index === `${ind}`);
                         if (!mockup) {
                             let e = this.generateMockup(ind);
@@ -880,6 +880,7 @@ class socketManager {
         // Update other
         gui.root.update(b.rerootUpgradeTree);
         gui.class.update(b.label);
+        gui.visibleName.update(b.settings.canSeeInvisible ? 1 : 0);
     }
 
     publish(gui) {
@@ -896,6 +897,7 @@ class socketManager {
             top: gui.topspeed.publish(),
             root: gui.root.publish(),
             class: gui.class.publish(),
+            visibleName: gui.visibleName.publish(),
         };
         // Encode which we'll be updating and capture those values only
         let oo = [0];
@@ -945,6 +947,10 @@ class socketManager {
             oo[0] += 0x0400;
             oo.push(o.class);
         }
+        if (o.visibleName != null) {
+            oo[0] += 0x0800;
+            oo.push(o.visibleName);
+        }
         // Output it
         return oo;
     }
@@ -966,6 +972,7 @@ class socketManager {
             bodyid: -1,
             root: this.floppy(),
             class: this.floppy(),
+            visibleName: this.floppy(),
         };
         // This is the gui itself
         return {
@@ -1083,7 +1090,7 @@ class socketManager {
             util.remove(this.disconnections, this.disconnections.indexOf(recover));
             clearTimeout(recover.timeout);
             body = recover.body;
-            body.reset(false);
+            util.remove(body.controllers, body.controllers.indexOf(body.controllers.find(rer => rer instanceof ioTypes.listenToPlayer)));
             body.become(player);
             player.team = body.team;
             socket.rememberedTeam = body.team;
@@ -1092,6 +1099,11 @@ class socketManager {
             body.protect();
             body.isPlayer = true;
             body.define(Config.SPAWN_CLASS);
+            if (Class.menu_tanks.UPGRADES_TIER_0[0] !== "basic") {
+                if (Class.developer.UPGRADES_TIER_0[0] !== "basic") {
+                    Class.menu_addons.UPGRADES_TIER_0.push("basic")
+                }
+            }
             body.name = name;
             if (socket.permissions && socket.permissions.nameColor) {
                 body.nameColor = socket.permissions.nameColor;
@@ -1135,14 +1147,15 @@ class socketManager {
                 }
             } break;
             default: {
-                body.team = getRandomTeam();
+                let team = filter.length ? player.team : getRandomTeam();
+                body.team = team;
                 body.color.base = Config.RANDOM_COLORS ? 
                     ran.choose([ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]) : getTeamColor(TEAM_RED);
                 let loop = setInterval(() => {
                     for (let e of entities.values()) {
                         if (body.team !== e.team || body.team !== -101 || body.team !== -1 || body.team !== -2 || body.team !== -3 || body.team !== -4) {
                             clearInterval(loop);
-                        } else body.team = getRandomTeam();
+                        } else body.team = team;
                     }
                 })
             }
@@ -1284,7 +1297,14 @@ class socketManager {
         // Return it
         return output;
     }
-    
+    getInvisEntityAlpha(player, other) {
+        let alpha;
+        if (player.body.id === other.master.id) {
+            alpha = other.alpha ? other.alpha * 0.75 + 0.25 : 0.25;
+        } else alpha = other.alpha ? other.alpha * 0.55 + 0.45 : 0.45;
+
+        return alpha;
+    }
     perspective(e, player, data) {
         if (player.body != null) {
             if (player.body.id === e.master.id) {
@@ -1295,6 +1315,15 @@ class socketManager {
                 if (player.command.autospin) {
                     data[10] = 1;
                 }
+                // Also let us see for our body.
+                let alpha = this.getInvisEntityAlpha(player, e);
+                if (!e.limited && !player.body.settings.canSeeInvisible) data[18] = Math.round(255 * alpha);
+            }
+            if (player.body.settings.canSeeInvisible) {
+                data = data.slice();
+                let alpha = this.getInvisEntityAlpha(player, e);
+                if (e.limited) data[14] = Math.round(255 * alpha);
+                else data[18] = Math.round(255 * alpha);
             }
             if (
                 player.body.team === e.source.team &&

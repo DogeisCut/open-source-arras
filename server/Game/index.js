@@ -255,7 +255,7 @@ class gameHandler {
             for (const other of grid.query(instance.minX, instance.minY, instance.maxX, instance.maxY).values()) {
                 this.collide(instance, other);
             }
-            if (!instance.bond) grid.insert(instance, instance.minX, instance.minY, instance.maxX, instance.maxY);
+            if (instance.isInGrid) grid.insert(instance, instance.minX, instance.minY, instance.maxX, instance.maxY);
             logs.collide.mark();
             if (instance.touchingSizeWall === false && instance.originalSize) {
                 instance.SIZE = instance.originalSize;
@@ -373,7 +373,7 @@ class gameHandler {
         }
         // Spawn bosses
         if (this.checkUsers() && Config.ENABLE_BOSS_SPAWN && !this.naturallySpawnedBosses.length && this.bossTimer++ > Config.BOSS_SPAWN_COOLDOWN) {
-            this.bossTimer = -Config.BOSS_SPAWN_DURATION - 2;
+            this.bossTimer = -Config.BOSS_SPAWN_DELAY - 2;
             let selection = Config.BOSS_TYPES[ran.chooseChance(...Config.BOSS_TYPES.map((selection) => selection.chance))],
                 amount = ran.chooseChance(...selection.amount) + 1;
             if (selection.message) {
@@ -399,7 +399,7 @@ class gameHandler {
                 }
 
                 global.gameManager.socketManager.broadcast(`${util.listify(names)} ${names.length == 1 ? 'has' : 'have'} arrived!`);
-            }, Config.BOSS_SPAWN_DURATION * 30);
+            }, Config.BOSS_SPAWN_DELAY * 30);
         }
     };
 

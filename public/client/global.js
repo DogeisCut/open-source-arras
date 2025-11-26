@@ -1,8 +1,8 @@
 import { util } from "./util.js";
 
-const missingMockup = {
+const missingno = {
     index: -1,
-    name: "Missing Mockup",
+    name: "missingno",
     x: 0,
     y: 0,
     color: "mirror 0 1 0 true",
@@ -16,7 +16,7 @@ const missingMockup = {
     },
     borderless: false,
     drawFill: true,
-    shape: "image=/unknownNotFound.png",
+    shape: "image=/missingno.png",
     imageInterpolation: "bilinear",
     size: 12,
     realSize: 12,
@@ -29,8 +29,8 @@ const missingMockup = {
         }
     },
     statnames: { body_damage: "???", max_health: "???", max_health: "???", bullet_speed: "???", bullet_health: "???", bullet_pen: "???", bullet_damage: "???", reload: "???", move_speed: "???", shield_regen: "???", shield_cap: "???" },
-    rerootUpgradeTree: "basic",
-    className: "missingMockup",
+    rerootUpgradeTree: "basic", // todo: find a way to make this automatically change to Config.SPAWN_CLASS without bricking everything
+    className: "missingno",
     upgrades: [],
     guns: [],
     turrets: [],
@@ -174,7 +174,6 @@ const global = {
     glCanvas: null,
     showChat: 0,
     generateTankTree: false,
-    needsFovAnimReset: true,
     specialPressed: false,
     specialKeysPressed: [],
     backgroundColor: '#f2fbff',
@@ -184,7 +183,7 @@ const global = {
     player: {},
     messages: [],
     mockups: [],
-    missingMockup: [missingMockup],
+    missingno: [missingno],
     roomSetup: [],
     entities: [],
     cached: {},
@@ -201,11 +200,16 @@ const global = {
         exitGame: Region(1),
         deathRespawn: Region(1),
         reconnect: Region(1),
-        graphicsMode: Region(20),
         classTreeZoomOut: Region(2),
         classTreeZoomIn: Region(2),
         classTreeClose: Region(1),
+        optionsMenu: {
+            switchButton: Region(2),
+            toggleBoxes: Region(100),
+            HoverBoxes: Region(100),
+        }
     },
+    optionsMenu_Anim: {isOpened: false}, // Placeholder
     statHover: false,
     upgradeHover: false,
     statMaxing: false,
@@ -328,6 +332,7 @@ const global = {
             screenHeight: global.screenHeight,
             nameColor: "#ffffff",
         }
+        list.animv.add(list.renderv);
         return list;
     },
     tankTree: (type) => {

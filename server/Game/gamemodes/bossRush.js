@@ -280,16 +280,24 @@ class bossRush {
     // runs once when the server starts
     start(mazeType) {
         this.gameActive = true;
-        for (let i = 0; i < Class.basic.UPGRADES_TIER_1.length; i++) {
-            let string = Class.basic.UPGRADES_TIER_1[i];
-            if (string === "desmos") {
-                Class.basic.UPGRADES_TIER_1[i] = "healer";
-            }
-        }
+        // Replace/remove certain tanks.
         for (let i = 0; i < Class.basic.UPGRADES_TIER_2.length; i++) {
             let string = Class.basic.UPGRADES_TIER_2[i];
             if (string === "smasher") {
-                Class.basic.UPGRADES_TIER_2[i] = "single";
+                Class.basic.UPGRADES_TIER_2[i] = "healer"
+                for (let i = 0; i < Class.menu_unavailable.UPGRADES_TIER_0.length; i++) {
+                    let string = Class.menu_unavailable.UPGRADES_TIER_0[i];
+                    if (string === "healer") {
+                        Class.menu_unavailable.UPGRADES_TIER_0[i] = "smasher"
+                    }
+                }
+            }
+        }
+        for (let i = 0; i < Class.director.UPGRADES_TIER_2.length; i++) {
+            let string = Class.director.UPGRADES_TIER_2[i];
+            if (string === "underseer") {
+                Class.director.UPGRADES_TIER_2.splice(i, 1)
+                Class.menu_unavailable.UPGRADES_TIER_0.push("underseer")
             }
         }
         for (let tile of this.room.spawnable[TEAM_BLUE]) {
