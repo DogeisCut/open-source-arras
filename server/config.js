@@ -117,7 +117,7 @@ module.exports = {
     BOT_NAME_PREFIX: '[AI] ', // The prefix of the player-bots names.
 
     // The class that players and player-bots spawn as.
-    SPAWN_CLASS: "basic",
+    SPAWN_CLASS: ["shell", "none"],
 
     // How every entity regenerates their health.
     REGENERATE_TICK: 100,
