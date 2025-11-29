@@ -1,6 +1,6 @@
 const { combineStats, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeRadialAuto, weaponArray, makeTurret, addAura, makeMenu, dereference } = require('../facilitators.js');
 const { base, statnames, dfltskl, smshskl } = require('../constants.js');
-const { createLine, createSpringConstraint } = require('./constraints.js');
+const { createLine, createSpringConstraint } = require('./constraints.js'); // TODO: disable tanks that use this if constraints arent there
 const g = require('../gunvals.js');
 
 /* Config */
@@ -673,7 +673,14 @@ tanks: {
 }
 
 bosses: {
-
+    Class.idkWhatToCallThis = {
+        PARENT: "miniboss",
+        LABEL: "Boss",
+        TURRETS: weaponArray({
+            POSITION: {SIZE: 7, X: 10, Y: 0, ANGLE: 180, ARC: 2, LAYER: 0},
+            TYPE: ["boomer", {GUN_STAT_SCALE: {reload: 0.8, health: 0.8}}],
+        }, 6), 
+    };
 }
 
 Class.menu_dogeisCutTanks = makeMenu("DogeisCut Tanks")
@@ -687,7 +694,7 @@ Class.menu_addons.UPGRADES_TIER_0.push("menu_dogeisCutTanks");
     Class.menu_dogeisCutTanks_fun.UPGRADES_TIER_0 = ["omegaObliterator"]
     
     Class.menu_dogeisCutTanks_bosses = makeMenu("Bosses")
-    Class.menu_dogeisCutTanks_bosses.UPGRADES_TIER_0 = ["dogeiscutBoss"]
+    Class.menu_dogeisCutTanks_bosses.UPGRADES_TIER_0 = ["dogeiscutBoss", "idkWhatToCallThis"]
 
 
 Class.basic.UPGRADES_TIER_1.push()
