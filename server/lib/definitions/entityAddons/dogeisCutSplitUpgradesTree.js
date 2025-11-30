@@ -2,10 +2,12 @@ const { combineStats, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeRad
 const g = require('../gunvals.js');
 const { base, statnames, dfltskl, smshskl } = require('../constants.js')
 
+const addonPrefix = "dcsut_"
+
 gunvals: {
-    g.turret2 = { reload: 10.5, recoil: 1.4, shudder: 0.1, damage: 0.75, speed: 5, spray: 15 }
-    g.double = { recoil: 0.5, shudder: 0.9, health: 0.9, damage: 0.7, spray: 1.2 }
-    g.exhaust = { damage: 0.03, size: 0.8, range: 0.05, reload: 0.25, maxSpeed: 0.8, spray: 5.5, shudder: 2.7, speed: 0.25, recoil: 1.1 }
+    g[addonPrefix + "turret"] = { reload: 10.5, recoil: 1.4, shudder: 0.1, damage: 0.75, speed: 5, spray: 15 }
+    g[addonPrefix + "double"] = { recoil: 0.5, shudder: 0.9, health: 0.9, damage: 0.7, spray: 1.2 }
+    g[addonPrefix + "exhaust"] = { damage: 0.03, size: 0.8, range: 0.05, reload: 0.25, maxSpeed: 0.8, spray: 5.5, shudder: 2.7, speed: 0.25, recoil: 1.1 }
 }
 
 projectiles: {
@@ -13,11 +15,11 @@ projectiles: {
 }
 
 bodies: {
-    Class.shell = {
+    Class[addonPrefix + "shell"] = {
         PARENT: "genericTank",
         LABEL: "Shell",
     }
-    Class.trim = {
+    Class[addonPrefix + "trim"] = {
         PARENT: "genericTank",
         LABEL: "Trim",
         SHAPE: 8,
@@ -27,7 +29,7 @@ bodies: {
             HEALTH: base.HEALTH * 0.95
         }
     }
-    Class.spine = {
+    Class[addonPrefix + "spine"] = {
         PARENT: "genericTank",
         LABEL: "Spine",
         BODY: {
@@ -41,7 +43,7 @@ bodies: {
             }
         ]
     },
-    Class.layer = {
+    Class[addonPrefix + "layer"] = {
         PARENT: "genericTank",
         LABEL: "Layer",
         BODY: {
@@ -55,7 +57,7 @@ bodies: {
             }
         ]
     }
-    Class.rocket = {
+    Class[addonPrefix + "rocket"] = {
         PARENT: "genericTank",
         LABEL: "Rocket",
         GUNS: [
@@ -72,13 +74,13 @@ bodies: {
                 PROPERTIES: {
                     AUTOFIRE: true,
                     COLOR: -1,
-                    SHOOT_SETTINGS: combineStats([g.basic, g.exhaust]),
+                    SHOOT_SETTINGS: combineStats([g.basic, g[addonPrefix + "exhaust"]]),
                     TYPE: "bullet",
                 }
             }
         ]
     },
-    Class.enchanted = {   
+    Class[addonPrefix + "enchanted"] = {   
         PARENT: "genericTank",
         LABEL: "Enchanted",
         BODY: {
@@ -93,15 +95,15 @@ bodies: {
         ]
     },
 
-    Class.shell.UPGRADES_TIER_0 = ["trim", "spine", "rocket", "layer", "enchanted"]
+    Class[addonPrefix + "shell"].UPGRADES_TIER_0 = [addonPrefix + "trim", addonPrefix + "spine", addonPrefix + "rocket", addonPrefix + "layer", addonPrefix + "enchanted"]
 }
 
 weapons: {
-    Class.none = {
+    Class[addonPrefix + "none"] = {
         PARENT: "genericTank",
         LABEL: "None",
     }
-    Class.turret = {
+    Class[addonPrefix + "turret"] = {
         PARENT: "genericTank",
         LABEL: "Turret",
         GUNS: [
@@ -116,13 +118,13 @@ weapons: {
                     DELAY: 0
                 },
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.turret2]),
+                    SHOOT_SETTINGS: combineStats([g[addonPrefix + "turret"]]),
                     TYPE: "bullet",
                 }
             }
         ]
     }
-    Class.denier = {
+    Class[addonPrefix + "denier"] = {
         PARENT: "genericTank",
         LABEL: "Denier",
         STAT_NAMES: statnames.trap,
@@ -148,7 +150,7 @@ weapons: {
             }
         ]
     }
-    Class.double = {
+    Class[addonPrefix + "double"] = {
         PARENT: "genericTank",
         LABEL: "Double",
         GUNS: [
@@ -163,7 +165,7 @@ weapons: {
                     DELAY: 0
                 },
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.basic, g.double]),
+                    SHOOT_SETTINGS: combineStats([g.basic, g[addonPrefix + "double"]]),
                     TYPE: "bullet",
                 }
             },
@@ -178,13 +180,13 @@ weapons: {
                     DELAY: 0.5
                 },
                 PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.basic, g.double]),
+                    SHOOT_SETTINGS: combineStats([g.basic, g[addonPrefix + "double"]]),
                     TYPE: "bullet",
                 }
             }
         ]
     }
-    Class.point = {
+    Class[addonPrefix + "point"] = {
         PARENT: "genericTank",
         LABEL: "Point",
         STAT_NAMES: {
@@ -209,6 +211,6 @@ weapons: {
         ]
     }
 
-    Class.none.UPGRADES_TIER_0 = ["turret", "denier", "point"]
-    //    Class.turret.UPGRADES_TIER_1 = ["double"]
+    Class[addonPrefix + "none"].UPGRADES_TIER_0 = [addonPrefix + "turret", addonPrefix + "denier", addonPrefix + "point"]
+    //    Class.turret.UPGRADES_TIER_1 = [addonPrefix + "double"]
 }
