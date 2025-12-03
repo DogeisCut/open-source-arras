@@ -9,7 +9,7 @@ const megaAutoOptions = {type: "megaAutoTurret", size: 12}
 // - anguisj, helenadev: general help
 // - u/SkyShredder89: tier 3/4 sprayer branch
 
-//return
+return;
 
 // not too concerned about following actual arms race tiers since they don't make any fucking sense
 Config.level_cap = 60
