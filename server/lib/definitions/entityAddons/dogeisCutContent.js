@@ -1,4 +1,4 @@
-const { combineStats, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeRadialAuto, weaponArray, makeTurret, makeAura, makeMenu, dereference } = require('../facilitators.js');
+const { combineStats, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeRadialAuto, weaponArray, makeTurret, makeAura, makeMenu, dereference, weaponMirror } = require('../facilitators.js');
 const { base, statnames, dfltskl, smshskl } = require('../constants.js');
 const { createLine, createSpringConstraint } = require('./constraints.js'); // TODO: disable tanks that use this if constraints arent there
 const g = require('../gunvals.js');
@@ -827,6 +827,101 @@ fun: {
                 },
             ],
         }
+
+        Class.shotswarm = {
+            PARENT: "genericTank",
+            LABEL: "Shotswarm",
+            DANGER: 7,
+            GUNS: [
+                ...weaponMirror([{
+                    POSITION: [4, 3, 1, 11, 3, 0, 0],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, {damage: 2, maxSpeed: 3}]),
+                        TYPE: "swarm"
+                    }
+                },
+                {
+                    POSITION: [1, 4, 1, 12, -1, 0, 0],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, {damage: 2, maxSpeed: 3}]),
+                        TYPE: "swarm"
+                    }
+                },
+                {
+                    POSITION: [1, 3, 1, 13, 1, 0, 0],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, {damage: 2, maxSpeed: 3}]),
+                        TYPE: "swarm"
+                    }
+                },
+                {
+                    POSITION: [1, 2, 1, 13, 2, 0, 0],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, {damage: 2, maxSpeed: 3}]),
+                        TYPE: "swarm"
+                    }
+                }], 0),
+                {
+                    POSITION: [4, 4, 1, 13, 0, 0, 0],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, {damage: 2, maxSpeed: 3}]),
+                        TYPE: "swarm"
+                    }
+                },
+                {
+                    POSITION: [15, 14, 0.7, 6, 0, 0, 0],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.machineGun, g.shotgun, g.fake, {damage: 2, maxSpeed: 3}]),
+                        TYPE: "swarm"
+                    }
+                },
+                {
+                    POSITION: [8, 14, -1.3, 4, 0, 0, 0]
+                }
+            ]
+        }
+
+        Class.agonizerTurret = makeTurret("overgunner")
+        Class.agonizer = {
+            PARENT: "genericTank",
+            DANGER: 7,
+            LABEL: "Pelicanbar",
+            BODY: {
+                SPEED: 1.2 * base.SPEED,
+                FOV: 1.1 * base.FOV,
+            },
+            GUNS: [
+                {
+                    POSITION: [42, 6.5, 1, 0, 0, 0, 0],
+                },
+                {
+                    POSITION: [6, 8.5, -1.5, 8, 0, 0, 0]
+                }
+            ],
+            TURRETS: [{
+                POSITION: [6, 42, 0, 0, 360, 1],
+                TYPE: [
+                    "agonizerTurret",
+                    { INDEPENDENT: true }
+                ],
+            },
+                {
+                    POSITION: [6, 32, 0, 0, 360, 1],
+                    TYPE: [
+                        "agonizerTurret",
+                        { INDEPENDENT: true }
+                    ],
+                },
+                {
+                    POSITION: [6, 22, 0, 0, 360, 1],
+                    TYPE: [
+                        "agonizerTurret",
+                        { INDEPENDENT: true }
+                    ],
+                },
+            ],
+        }
+        Class.agonizer = makeBird(Class.agonizer, "Agonizer") 
     } 
 }
 
@@ -841,7 +936,7 @@ Class.menu_addons.UPGRADES_TIER_0.push("menu_dogeisCutTanks");
     Class.menu_dogeisCutTanks_fun.UPGRADES_TIER_0 = ["menu_dogeisCutTanks_fun_opTanks", "omegaObliterator"]
 
         Class.menu_dogeisCutTanks_fun_opTanks = makeMenu("OP Tanks")
-        Class.menu_dogeisCutTanks_fun_opTanks.UPGRADES_TIER_0 = ["cannon", "cracklord", "australia", "mechanic"]
+        Class.menu_dogeisCutTanks_fun_opTanks.UPGRADES_TIER_0 = ["cannon", "cracklord", "australia", "mechanic", "shotswarm", "agonizer"]
     
     Class.menu_dogeisCutTanks_bosses = makeMenu("Bosses")
     Class.menu_dogeisCutTanks_bosses.UPGRADES_TIER_0 = ["dogeiscutBoss", "idkWhatToCallThis"]
