@@ -689,13 +689,141 @@ fun: {
             PARENT: "genericTank",
             LABEL: "Cannon",
             DANGER: 6,
+            BODY: {
+                SPEED: 1.2 * base.SPEED,
+                FOV: 1.5 * base.FOV,
+            },
             GUNS: [
                 {
                     POSITION: [28, 14, 1, 0, 0, 0, 0],
                     PROPERTIES: {
-                        SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, {speed: 4, reload: 0.5, recoil: 0.5}]),
+                        SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, {speed: 4, maxSpeed: 4, reload: 0.5, recoil: 0.75}]),
                         TYPE: "bullet",
                     },
+                },
+            ],
+        }
+            
+        Class.cracklord = {
+            PARENT: "genericTank",
+            LABEL: "Cracklord",
+            DANGER: 7,
+            STAT_NAMES: statnames.drone,
+            BODY: {
+                SPEED: 1.2 * base.SPEED,
+                FOV: 1.1 * base.FOV,
+            },
+            MAX_CHILDREN: 8,
+            GUNS: [
+                ...weaponArray({
+                POSITION: [6, 12, 1.2, 8, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.drone, g.overseer, { speed: 3, maxSpeed: 3 }]),
+                    TYPE: "drone",
+                    AUTOFIRE: true,
+                    SYNCS_SKILLS: true,
+                    STAT_CALCULATOR: "drone",
+                    WAIT_TO_CYCLE: true
+                }
+                }, 4),
+                ...weaponArray({
+                    POSITION: [8, 5, 0.001, 8, 0, 0, 0],
+                }, 4)
+            ]
+            }
+        
+        Class.australia = {
+            PARENT: "genericTank",
+            LABEL: "Australia",
+            DANGER: 7,
+            STAT_NAMES: statnames.drone,
+            BODY: {
+                SPEED: base.SPEED * 0.8,
+                FOV: 1.1,
+            },
+            GUNS: [
+                {
+                    POSITION: [5, 11, 1, 10.5, 0, 0, 0],
+                },
+                {
+                    POSITION: [2, 14, 1, 15.5, 0, 0, 0],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.factory]),
+                        TYPE: ["minion", { GUNS: Class.boomer.GUNS }],
+                        MAX_CHILDREN: 6,
+                        STAT_CALCULATOR: "drone",
+                        AUTOFIRE: true,
+                        SYNCS_SKILLS: true,
+                    },
+                },
+                {
+                    POSITION: [12, 14, -1.4, 0, 0, 0, 0],
+                },
+            ],
+        }
+
+        Class.turretBoxTurret = makeTurret({
+            HAS_NO_RECOIL: true,
+            GUNS: [
+                {
+                    POSITION: [16, 5, 1, 0, -5, 0, 0],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.autoTurret, { density: 0.1, speed: 0.5, range: 1.5 }]),
+                        TYPE: "bullet",
+                        WAIT_TO_CYCLE: true
+                    },
+                },
+                {
+                    POSITION: [16, 5, 1, 0, 5, 0, 0.5],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.autoTurret, { density: 0.1, speed: 0.5, range: 1.5 }]),
+                        TYPE: "bullet",
+                        WAIT_TO_CYCLE: true
+                    },
+                },
+            ],
+        }, {extraStats: [], hasAI: false, canRepel: true})
+        Class.turretBox = {
+            PARENT: "setTrap",
+            LABEL: "Sentry Turret",
+            DIE_AT_RANGE: true,
+            TURRETS: [
+                {
+                    POSITION: [16, 0, 0, 0, 360, 1],
+                    TYPE: "turretBoxTurret",
+                },
+            ],
+        }
+        Class.mechanic = {
+            PARENT: "genericTank",
+            DANGER: 7,
+            LABEL: "Mechanic",
+            STAT_NAMES: statnames.trap,
+            BODY: {
+                SPEED: 0.75 * base.SPEED,
+                FOV: 1.15 * base.FOV,
+            },
+            GUNS: [
+                {
+                    POSITION: [5, 11, -1.3, 10.5, 0, 0, 0],
+                },
+                {
+                    POSITION: [3, 14, -1.3, 15.5, 0, 0, 0],
+                },
+                {
+                    POSITION: [2, 14, 1.3, 18, 0, 0, 0],
+                    PROPERTIES: {
+                        MAX_CHILDREN: 6,
+                        SHOOT_SETTINGS: combineStats([g.trap, g.setTrap]),
+                        TYPE: "turretBox",
+                        NO_LIMITATIONS: true,
+                        SYNCS_SKILLS: true,
+                        DESTROY_OLDEST_CHILD: true,
+                        STAT_CALCULATOR: "block"
+                    },
+                },
+                {
+                    POSITION: [4, 14, -1.3, 8, 0, 0, 0],
                 },
             ],
         }
@@ -713,7 +841,7 @@ Class.menu_addons.UPGRADES_TIER_0.push("menu_dogeisCutTanks");
     Class.menu_dogeisCutTanks_fun.UPGRADES_TIER_0 = ["menu_dogeisCutTanks_fun_opTanks", "omegaObliterator"]
 
         Class.menu_dogeisCutTanks_fun_opTanks = makeMenu("OP Tanks")
-        Class.menu_dogeisCutTanks_fun_opTanks.UPGRADES_TIER_0 = ["cannon"]
+        Class.menu_dogeisCutTanks_fun_opTanks.UPGRADES_TIER_0 = ["cannon", "cracklord", "australia", "mechanic"]
     
     Class.menu_dogeisCutTanks_bosses = makeMenu("Bosses")
     Class.menu_dogeisCutTanks_bosses.UPGRADES_TIER_0 = ["dogeiscutBoss", "idkWhatToCallThis"]
