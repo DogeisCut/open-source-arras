@@ -16,7 +16,7 @@ module.exports = {
             // This also overrides the below HOST and PORT settings to be identical to the main server's HOST/PORT (by default, 3000).
 
             host: "localhost:3001", // Server host location.
-            port: 3002, // The port on the server.
+            port: 3001, // The port on the server.
             id: "lod", // (<HOST>/#<SERVER_ID>)
             featured: false,
 
@@ -27,13 +27,6 @@ module.exports = {
             properties: { // This overrides settings in the config.js file, providing the selected gamemode doesn't also override it.
                 teams: 4,
                 bot_cap: 45,
-                daily_tank: { 
-                    tank: "master",
-                    tier: 3,
-                    ads: {
-                        enabled: false
-                    } 
-                }
             }
         },
     ],

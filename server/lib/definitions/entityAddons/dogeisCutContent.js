@@ -710,7 +710,7 @@ Class.menu_addons.UPGRADES_TIER_0.push("menu_dogeisCutTanks");
     Class.menu_dogeisCutTanks_tests.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler"]
 
     Class.menu_dogeisCutTanks_fun = makeMenu("Fun")
-    Class.menu_dogeisCutTanks_fun.UPGRADES_TIER_0 = ["omegaObliterator"]
+    Class.menu_dogeisCutTanks_fun.UPGRADES_TIER_0 = ["menu_dogeisCutTanks_fun_opTanks", "omegaObliterator"]
 
         Class.menu_dogeisCutTanks_fun_opTanks = makeMenu("OP Tanks")
         Class.menu_dogeisCutTanks_fun_opTanks.UPGRADES_TIER_0 = ["cannon"]
