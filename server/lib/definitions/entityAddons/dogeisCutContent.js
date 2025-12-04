@@ -1170,7 +1170,7 @@ fun: {
     Class.benderSegment5 = {
         PARENT: 'genericTank',
         BODY: { FOV: 2 },
-        SHAPE: 4,
+        //SHAPE: [[-2,-1],[1,-1],[1,1],[-2,1]],
         GUNS: [
             {
                 POSITION: {
