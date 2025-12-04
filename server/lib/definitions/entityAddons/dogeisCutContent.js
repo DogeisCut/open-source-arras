@@ -697,16 +697,19 @@ fun: {
                 {
                     POSITION: [28, 14, 1, 0, 0, 0, 0],
                     PROPERTIES: {
-                        SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, {speed: 4, maxSpeed: 4, reload: 0.5, recoil: 0.75}]),
+                        SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, {speed: 4, maxSpeed: 4, reload: 0.5, recoil: 2}]),
                         TYPE: "bullet",
                     },
+                },
+                {
+                    POSITION: [15, 14, -1.2, 0, 0, 0, 0],
                 },
             ],
         }
             
         Class.cracklord = {
             PARENT: "genericTank",
-            LABEL: "Cracklord",
+            LABEL: "Escobar",
             DANGER: 7,
             STAT_NAMES: statnames.drone,
             BODY: {
@@ -805,10 +808,10 @@ fun: {
             },
             GUNS: [
                 {
-                    POSITION: [5, 11, -1.3, 10.5, 0, 0, 0],
+                    POSITION: [5, 11, 1, 10.5, 0, 0, 0],
                 },
                 {
-                    POSITION: [3, 14, -1.3, 15.5, 0, 0, 0],
+                    POSITION: [3, 14, -1.2, 15.5, 0, 0, 0],
                 },
                 {
                     POSITION: [2, 14, 1.3, 18, 0, 0, 0],
@@ -823,7 +826,7 @@ fun: {
                     },
                 },
                 {
-                    POSITION: [4, 14, -1.3, 8, 0, 0, 0],
+                    POSITION: [4, 14, -1.2, 8, 0, 0, 0],
                 },
             ],
         }
@@ -885,7 +888,7 @@ fun: {
         Class.agonizer = {
             PARENT: "genericTank",
             DANGER: 7,
-            LABEL: "Pelicanbar",
+            LABEL: "Agonizer",
             BODY: {
                 SPEED: 1.2 * base.SPEED,
                 FOV: 1.1 * base.FOV,
@@ -921,8 +924,329 @@ fun: {
                 },
             ],
         }
-        Class.agonizer = makeBird(Class.agonizer, "Agonizer") 
+        Class.agonizer = makeBird(Class.agonizer, "Pelicanbar") 
+
+        Class.crow5 = makeRadialAuto("crowbarTurret", { isTurret: true, danger: 14, label: "Crow-5", count: 5 })
+        Class.auto9 = makeRadialAuto("autoTankGun", { isTurret: true, danger: 14, label: "Auto-9", count: 9, size: 11 / 2, x: 9 })
+        Class.auto9.SIZE = 24
+
+        Class.fumigatorTrapAura = makeAura(3, 6)
+        Class.fumigatorTrap = {
+            PARENT: "trap",
+            TURRETS: [{
+                POSITION: [9, 0, 0, 0, 360, 1],
+                TYPE: "fumigatorTrapAura",
+            }]
+        }
+        
+        Class.fumigator = {
+            PARENT: "genericTank",
+            DANGER: 7,
+            LABEL: "Fumigator",
+            STAT_NAMES: statnames.trap,
+            BODY: {
+                FOV: 1.15,
+            },
+            GUNS: [
+                {
+                    POSITION: [24, 8, 1, 0, 0, 0, 0],
+                },
+                {
+                    POSITION: [4, 8, 1.3, 22, 0, 0, 0],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.trap, g.minigun, g.barricade]),
+                        TYPE: "fumigatorTrap",
+                        STAT_CALCULATOR: "trap"
+                    },
+                },
+                {
+                    POSITION: [4, 8, 1.3, 18, 0, 0, 1/3],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.trap, g.minigun, g.barricade]),
+                        TYPE: "fumigatorTrap",
+                        STAT_CALCULATOR: "trap",
+                    },
+                },
+                {
+                    POSITION: [4, 8, 1.3, 14, 0, 0, 2/3],
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.trap, g.minigun, g.barricade]),
+                        TYPE: "fumigatorTrap",
+                        STAT_CALCULATOR: "trap",
+                    },
+                },
+            ],
+            TURRETS: [{
+                POSITION: [8, 26, 0, 0, 0, 0],
+                TYPE: ["genericTank", {COLOR: 0}],
+            }]
+        }
     } 
+
+    Class.traitor = {
+            PARENT: "genericTank",
+            LABEL: "Traitor",
+            DANGER: 30,
+            GUNS: [
+                {
+                    POSITION: {
+                        LENGTH: 24,
+                        WIDTH: 8.5
+                    },
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                        TYPE: "bullet"
+                    }
+                }
+            ],
+            ON: [
+                {
+                    event: "fire",
+                    handler: ({ body, gun, globalMasterStore, child, masterStore, gunStore }) => {
+                        child.team = -body.team
+                    },
+                }
+            ]
+        }
+
+        Class.selfKillerBarrel = {
+            SHAPE: "M 0 -0.5 L 0 0.5 L 2 0.5 A 1 1 0 0 0 3 -0.5 L 3 -3 A 1 1 0 0 0 2 -4 L 0.5 -4 A 1 1 0 0 0 -0.5 -3 L -0.5 -2.5 L 0.5 -2.5 L 0.5 -3 L 2 -3 L 2 -0.5 Z",
+            COLOR: 16,
+            MIRROR_MASTER_ANGLE: true
+        }
+        Class.selfKiller = {
+            PARENT: "genericTank",
+            LABEL: "Self Killer",
+            DANGER: 30,
+            GUNS: [
+                {
+                    POSITION: {
+                        LENGTH: 5,
+                        WIDTH: 10,
+                        ANGLE: 90,
+                        X: -25
+                    },
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+                        TYPE: "bullet"
+                    }
+                },
+                {
+                    POSITION: {
+                        LENGTH: 7,
+                        WIDTH: 10,
+                        ANGLE: 90,
+                        X: -25 + -5
+                    },
+                    PROPERTIES: {
+                        BORDERLESS: true
+                    }
+                }
+            ],
+            ON: [
+                {
+                    event: "fire",
+                    handler: ({ body, gun, globalMasterStore, child, masterStore, gunStore }) => {
+                        child.team = -body.team
+                    },
+                }
+            ],
+            TURRETS: [{
+                POSITION: [20, 0, 0, 0, 0, 0],
+                TYPE: ["selfKillerBarrel", { COLOR: 16 }],
+            }]
+        }
+        
+    const BENDER_MAX_BEND_ANGLE = 270
+    Class.barrelCover = {
+        PARENT: 'genericTank',
+        BODY: { FOV: 2 },
+        BORDERLESS: true,
+        COLOR: 16,
+        GUNS: [
+            {
+                POSITION: {
+                    LENGTH: 20,
+                    WIDTH: 20,
+                },
+                PROPERTIES: {
+                    BORDERLESS: true,
+                }
+            }
+        ],
+    }
+    Class.barrelCoverFire = {
+        PARENT: 'genericTank',
+        BODY: { FOV: 2 },
+        BORDERLESS: true,
+        COLOR: 16,
+        GUNS: [
+            {
+                POSITION: {
+                    LENGTH: 20,
+                    WIDTH: 20,
+                },
+                PROPERTIES: {
+                    BORDERLESS: true,
+                    SHOOT_SETTINGS: combineStats([g.basic, g.fake]),
+                    TYPE: "bullet"
+                }
+            }
+        ],
+    }
+    Class.benderSegment1 = {
+        PARENT: 'genericTank',
+        BODY: { FOV: 2 },
+        GUNS: [
+            {
+                POSITION: {
+                    LENGTH: 20,
+                    WIDTH: 20,
+                },
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+                    TYPE: "bullet"
+                }
+            }
+        ],
+    }
+    Class.benderSegment2 = {
+        PARENT: 'genericTank',
+        BODY: { FOV: 2 },
+        GUNS: [
+            {
+                POSITION: {
+                    LENGTH: 20,
+                    WIDTH: 20,
+                },
+            }
+        ],
+        TURRETS: [{
+            POSITION: [20, 20, 0, 0, BENDER_MAX_BEND_ANGLE*(5/5), 0],
+            TYPE: "benderSegment1",
+        },{
+            POSITION: [20, 20, 0, 0, BENDER_MAX_BEND_ANGLE*(5/5), 1],
+            TYPE: "barrelCoverFire",
+        }],
+    }
+    Class.benderSegment3 = {
+        PARENT: 'genericTank',
+        BODY: { FOV: 2 },
+        GUNS: [
+            {
+                POSITION: {
+                    LENGTH: 20,
+                    WIDTH: 20,
+                },
+            }
+        ],
+        TURRETS: [{
+            POSITION: [20, 20, 0, 0, BENDER_MAX_BEND_ANGLE*(4/5), 0],
+            TYPE: "benderSegment2",
+        },{
+            POSITION: [20, 20, 0, 0, BENDER_MAX_BEND_ANGLE*(4/5), 1],
+            TYPE: "barrelCover",
+        }],
+    }
+    Class.benderSegment4 = {
+        PARENT: 'genericTank',
+        BODY: { FOV: 2 },
+        GUNS: [
+            {
+                POSITION: {
+                    LENGTH: 20,
+                    WIDTH: 20,
+                },
+            }
+        ],
+        TURRETS: [{
+            POSITION: [20, 20, 0, 0, BENDER_MAX_BEND_ANGLE*(3/5), 0],
+            TYPE: "benderSegment3",
+        },{
+            POSITION: [20, 20, 0, 0, BENDER_MAX_BEND_ANGLE*(3/5), 1],
+            TYPE: "barrelCover",
+        }],
+    }
+    Class.benderSegment5 = {
+        PARENT: 'genericTank',
+        BODY: { FOV: 2 },
+        SHAPE: 4,
+        GUNS: [
+            {
+                POSITION: {
+                    LENGTH: 20,
+                    WIDTH: 20,
+                },
+            }
+        ],
+        TURRETS: [{
+            POSITION: [20, 20, 0, 0, BENDER_MAX_BEND_ANGLE*(2/5), 0],
+            TYPE: "benderSegment4",
+        },{
+            POSITION: [20, 20, 0, 0, BENDER_MAX_BEND_ANGLE*(2/5), 1],
+            TYPE: "barrelCover",
+        }],
+    }
+    Class.bender = {
+        PARENT: "genericTank",
+        LABEL: "Bender",
+        FACING_TYPE: "locksFacing",
+        TURRETS: [{
+            POSITION: [10, 10, 0, 0, BENDER_MAX_BEND_ANGLE*(1/5), 0],
+            TYPE: "benderSegment5",
+        },{
+            POSITION: [10, 10, 0, 0, BENDER_MAX_BEND_ANGLE*(1/5), 0],
+            TYPE: "barrelCover",
+        }]
+    }
+
+    Class.imposter = {
+        PARENT: "genericTank",
+        LABEL: "Imposter",
+        SHAPE: 0,
+        SIZE: 12,
+        COLOR: null,
+        ON: [
+            {
+                event: "kill",
+                handler: ({ body, entity }) => {
+                    const definitionLabel = entity.defs[0]
+                    const definition = Class[definitionLabel]
+                    if (definition.PARENT == "genericTank") {
+                        body.define({
+                            ...Class.genericTank,
+                            ...Class.imposter,
+                            GUNS: [],
+                            ...definition,
+                            CONTROLLERS: Class.genericTank.CONTROLLERS,
+                            MOTION_TYPE: Class.genericTank.MOTION_TYPE,
+                            FACING_TYPE: Class.genericTank.FACING_TYPE,
+                            LABEL: definition.LABEL ? `Imposter (${definition.LABEL})` : `Imposter`,
+                            
+                        })
+                    }
+                },  
+            },
+            {
+                event: "death",
+                handler: (body, killers, killTools) => {
+                    body.define("imposter")
+                }
+            }
+        ],
+        GUNS: [
+            {
+                POSITION: {
+                    LENGTH: 20,
+                    WIDTH: 10,
+                },
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic]),
+                    TYPE: "bullet"
+                }
+            }
+        ],
+    }
 }
 
 Class.menu_dogeisCutTanks = makeMenu("DogeisCut Tanks")
@@ -933,10 +1257,10 @@ Class.menu_addons.UPGRADES_TIER_0.push("menu_dogeisCutTanks");
     Class.menu_dogeisCutTanks_tests.UPGRADES_TIER_0 = ["sgn", "zapwire", "toverseer", "softBoxSpawnerGenerator", "grappler"]
 
     Class.menu_dogeisCutTanks_fun = makeMenu("Fun")
-    Class.menu_dogeisCutTanks_fun.UPGRADES_TIER_0 = ["menu_dogeisCutTanks_fun_opTanks", "omegaObliterator"]
+    Class.menu_dogeisCutTanks_fun.UPGRADES_TIER_0 = ["menu_dogeisCutTanks_fun_opTanks", "omegaObliterator", "traitor", "selfKiller", "bender", "imposter"]
 
         Class.menu_dogeisCutTanks_fun_opTanks = makeMenu("OP Tanks")
-        Class.menu_dogeisCutTanks_fun_opTanks.UPGRADES_TIER_0 = ["cannon", "cracklord", "australia", "mechanic", "shotswarm", "agonizer"]
+        Class.menu_dogeisCutTanks_fun_opTanks.UPGRADES_TIER_0 = ["cannon", "cracklord", "australia", "mechanic", "shotswarm", "agonizer", "crow5", "auto9", "fumigator"]
     
     Class.menu_dogeisCutTanks_bosses = makeMenu("Bosses")
     Class.menu_dogeisCutTanks_bosses.UPGRADES_TIER_0 = ["dogeiscutBoss", "idkWhatToCallThis"]
