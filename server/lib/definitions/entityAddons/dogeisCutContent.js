@@ -1212,7 +1212,7 @@ fun: {
                 handler: ({ body, entity }) => {
                     const definitionLabel = entity.defs[0]
                     const definition = Class[definitionLabel]
-                    if (definition.PARENT == "genericTank") {
+                    if (definition && definition.PARENT && definition.PARENT === "genericTank") {
                         body.define({
                             ...Class.genericTank,
                             ...Class.imposter,
@@ -1230,7 +1230,7 @@ fun: {
             {
                 event: "death",
                 handler: (body, killers, killTools) => {
-                    body.define("imposter")
+                    body.define(Class.imposter)
                 }
             }
         ],
