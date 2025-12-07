@@ -36,7 +36,7 @@ Class.dcmr_originalMothership = {
                 DELAY: 0
 			},
             PROPERTIES: {
-                MAX_CHILDREN: 2,
+                MAX_CHILDREN: 1,
                 SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.mothership]),
                 TYPE: "drone",
                 AUTOFIRE: true,
@@ -55,7 +55,7 @@ Class.dcmr_originalMothership = {
                 DELAY: 1 / 32
 			},
             PROPERTIES: {
-                MAX_CHILDREN: 2,
+                MAX_CHILDREN: 1,
                 SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.mothership]),
                 TYPE: ["drone", {
                         AI: {skynet: true},
@@ -153,7 +153,7 @@ Class.dcmr_mother = {
 			},
             PROPERTIES: {
                 MAX_CHILDREN: 2,
-                SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.bigCheese, g.mothership]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.bigCheese, g.mothership, {maxSpeed: 0.5}]),
                 TYPE: "drone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
@@ -172,7 +172,7 @@ Class.dcmr_mother = {
 			},
             PROPERTIES: {
                 MAX_CHILDREN: 2,
-                SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.bigCheese, g.mothership]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.bigCheese, g.mothership, {maxSpeed: 0.5}]),
                 TYPE: ["drone", {
                         AI: {skynet: true},
                         INDEPENDENT: true,
@@ -502,10 +502,10 @@ scouts: {
             FOV: 1,
             SHIELD: 0.3,
             SPEED: base.SPEED/1.8,
-            HEALTH: 500,
-            PUSHABILITY: 0.8,
+            HEALTH: 250,
+            PUSHABILITY: 3,
             DENSITY: 0.4,
-            DAMAGE: 1.5,
+            DAMAGE: 0.5,
         },
         HITS_OWN_TYPE: "pushOnlyTeam",
     }

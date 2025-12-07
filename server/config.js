@@ -21,12 +21,12 @@ module.exports = {
             featured: false,
 
             region: "local", // The region the server is on.
-            gamemode: ["maze", "tdm"], // The selected gamemode.
+            gamemode: ["mothership"], // The selected gamemode.
             player_cap: 80, // Not including bots.
 
             properties: { // This overrides settings in the config.js file, providing the selected gamemode doesn't also override it.
-                teams: 4,
-                bot_cap: 45,
+                teams: 2,
+                bot_cap: 16,
             }
         },
     ],

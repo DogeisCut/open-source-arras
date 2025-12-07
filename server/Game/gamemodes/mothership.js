@@ -1,6 +1,6 @@
 class Mothership {
     constructor() {
-        this.choices = ["mothership"];
+        this.choices = ["dcmr_mother"];
         this.defineProperties();
         Config.mothership_data = {
             getData: () => this.globalMotherships,
