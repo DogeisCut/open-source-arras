@@ -27,7 +27,6 @@ Class.desmos = {
             }
         },
         ...weaponMirror({
-            POSITION: [3.75, 10, 2.125, 1.5, -6.25, 90, 0],
             POSITION: {
                 LENGTH: 3.75,
 				WIDTH: 10,
@@ -112,7 +111,6 @@ Class[ADDON_PREFIX + "neutron"] = {
             }
         },
         ...weaponMirror({
-            POSITION: [3.75, 10, 2.125, 1.5, -6.25, 90, 0],
             POSITION: {
                 LENGTH: 3.75,
 				WIDTH: 10,
@@ -147,7 +145,6 @@ Class[ADDON_PREFIX + "proton"] = {
             }
         },
         ...weaponMirror({
-            POSITION: [3.75, 10, 2.125, 1.5, -6.25, 90, 0],
             POSITION: {
                 LENGTH: 3.75,
 				WIDTH: 10,
