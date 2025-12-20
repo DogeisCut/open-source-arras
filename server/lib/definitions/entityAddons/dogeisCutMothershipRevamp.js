@@ -2,6 +2,17 @@ const { combineStats, skillSet, makeAuto, weaponArray, weaponMirror } = require(
 const { base, statnames, dfltskl, smshskl } = require('../constants.js')
 const g = require('../gunvals.js')
 
+/* Issues:
+- Motherships seem to lose FOV when upgrading.
+- Motherships can damage each other (both via ramming and bullets/drones/minions)
+- Scouts get kills in the name of the mothership
+- Scout eggs are really uninteresting
+- Scout AI is super robotic, agressive, and stupid.
+- Scouts can ram motherships for shit tons of damage.
+- Scouts are killed after the mothership upgrades
+- Theres no global pushing force keeping the motherships apart.
+*/
+
 Class.dcmr_originalMothership = {
     PARENT: "genericTank",
     LABEL: "Mothership",
@@ -137,6 +148,33 @@ Class.dcmr_mothershipScoutSpawner = {
     ], 3, 1/3)
 }
 
+Class.dcmr_droneDeco = {
+    SHAPE: 3,
+    COLOR: -1
+}
+Class.dcmr_betaDrone = {
+    PARENT: "drone",
+    PROPS: [
+        {
+            POSITION: { SIZE: 10, X: 0, Y: 0, ANGLE: 60, ARC: 0, LAYER: 1 },
+            TYPE: "dcmr_droneDeco"
+        }
+    ]
+}
+Class.dcmr_alphaDrone = {
+    PARENT: "drone",
+    PROPS: [
+        {
+            POSITION: { SIZE: 10, X: 0, Y: 0, ANGLE: 60, ARC: 0, LAYER: 1 },
+            TYPE: "dcmr_droneDeco"
+        },
+        {
+            POSITION: { SIZE: 5, X: 0, Y: 0, ANGLE: 0, ARC: 0, LAYER: 1 },
+            TYPE: "dcmr_droneDeco"
+        }
+    ]
+}
+
 Class.dcmr_mother = {
     PARENT: "dcmr_genericMothership",
     LABEL: "Mother",
@@ -154,7 +192,7 @@ Class.dcmr_mother = {
             PROPERTIES: {
                 MAX_CHILDREN: 2,
                 SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.bigCheese, g.mothership, {maxSpeed: 0.5}]),
-                TYPE: "drone",
+                TYPE: "dcmr_alphaDrone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
                 STAT_CALCULATOR: "drone",
@@ -173,7 +211,7 @@ Class.dcmr_mother = {
             PROPERTIES: {
                 MAX_CHILDREN: 2,
                 SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.bigCheese, g.mothership, {maxSpeed: 0.5}]),
-                TYPE: ["drone", {
+                TYPE: ["dcmr_alphaDrone", {
                         AI: {skynet: true},
                         INDEPENDENT: true,
                         BODY: {FOV: 2},
@@ -388,18 +426,31 @@ Class.dcmr_protector = {
         REGEN: 0.6,
         FOV: 1.2,
     },
-    GUNS: weaponArray([
-        {
-            POSITION: [32/2, 8/3, 1, 0, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.mothership]),
-                TYPE: "bullet",
+    GUNS: [
+        ...weaponArray([
+            {
+                POSITION: [32/2, 8/3, 1, 0, 0, (1/9)/2, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.mothership]),
+                    TYPE: "bullet",
+                },
             },
-        },
-        {
-            POSITION: [5/1.5, 8/3, -1.4, 8, 0, 0, 0],
-        },
-    ], 9, 1/9),
+            {
+                POSITION: [5/1.5, 8/3, -1.4, 8, 0, (1/9)/2, 0],
+            },
+            {
+                POSITION: [28/2, 7/3, 1, 0, 0, (1/9), (1/9)/2],
+                PROPERTIES: {
+                    AUTOFIRE: true,
+                    SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, g.mothership]),
+                    TYPE: "bullet",
+                },
+            },
+            {
+                POSITION: [5/1.5, 7/3, -1.4, 8, 0, (1/9), (1/9)/2],
+            },
+        ], 9, 1 / 9),
+    ],
 }
 
 Class.dcmr_residenceBody = {
@@ -434,8 +485,8 @@ Class.dcmr_residence = {
 			},
             PROPERTIES: {
                 MAX_CHILDREN: 2,
-                SHOOT_SETTINGS: combineStats([g.drone, g.bigCheese, g.mothership, {size: 0.8}]),
-                TYPE: ["drone", {
+                SHOOT_SETTINGS: combineStats([g.drone, g.bigCheese, g.mothership, {size: 0.8, maxSpeed: 0.75}]),
+                TYPE: ["dcmr_betaDrone", {
                         AI: {skynet: true},
                         INDEPENDENT: true,
                         BODY: {FOV: 2},
@@ -491,6 +542,8 @@ scouts: {
         LABEL: "Unknown Scout",
         NAME: "Scout",
         REROOT_UPGRADE_TREE: "dcmr_expender",
+        SYNC_WITH_TANK: true,
+        FACING_TYPE: ["smoothToTarget", { smoothness: 10 }],
         DANGER: 8,
         SIZE: Class.genericTank.SIZE * (12 / 3) / 3,
         SHAPE: 9,
@@ -501,7 +554,7 @@ scouts: {
             REGEN: 0.75,
             FOV: 1,
             SHIELD: 0.3,
-            SPEED: base.SPEED/1.8,
+            SPEED: base.SPEED/2.8,
             HEALTH: 250,
             PUSHABILITY: 3,
             DENSITY: 0.4,
@@ -533,10 +586,137 @@ scouts: {
         ],
         UPGRADES_TIER_1: []
     }
+
+    Class.dcmr_engulpher = {
+        PARENT: "dcmr_genericScout",
+        LABEL: "Engulpher",
+        GUNS: [
+            ...weaponMirror({
+                POSITION: [18 / 1.5, 10 / 1.5, 1.3, 0, 5 / 1.5, 0, 0.5],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.swarm, g.battleship, g.dcmr_scout]),
+                    TYPE: "bullet"
+                }
+            }, 0),
+            {
+                POSITION: [21 / 1.5, 10 / 1.5, 1.3, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.swarm, g.battleship, g.dcmr_scout]),
+                    TYPE: "bullet"
+                }
+            }
+        ],
+    }
+
+    Class.dcmr_crusherBody = {
+        LABEL: "",
+        FACING_TYPE: ["spin", { speed: 0.08 }],
+        COLOR: "black",
+        SHAPE: 8,
+        SIZE: 12,
+        INDEPENDENT: true
+    }
+    Class.dcmr_crusher = {
+        PARENT: "dcmr_genericScout",
+        LABEL: "Crusher",
+        BODY: {
+            REGEN: 0.8,
+            FOV: 1,
+            SHIELD: 0.5,
+            SPEED: base.SPEED/0.8,
+            HEALTH: 200,
+            PUSHABILITY: 2,
+            DENSITY: 0.5,
+            DAMAGE: 4.5,
+        },
+        TURRETS: [
+            {
+                POSITION: [22.5, 0, 0, 0, 360, 0],
+                TYPE: "dcmr_crusherBody"
+            },
+        ]
+    }
+
+    Class.dcmr_defender = {
+        PARENT: "dcmr_genericScout",
+        LABEL: "Defender",
+        GUNS: [
+            ...weaponMirror({
+                POSITION: [15 / 1.5, 8 / 1.5, 1, 0, 10 / 1.5, 0, 0.0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot, g.dcmr_scout]),
+                    TYPE: "bullet"
+                }
+            }, 0),
+            ...weaponMirror({
+                POSITION: [18 / 1.5, 10 / 1.5, 1, 0, 5 / 1.5, 0, 0.5],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot, g.dcmr_scout]),
+                    TYPE: "bullet"
+                }
+            }, 0),
+            {
+                POSITION: [21 / 1.5, 10 / 1.5, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot, g.dcmr_scout]),
+                    TYPE: "bullet"
+                }
+            }
+        ]
+    }
+
+    Class.dcmr_speedster = {
+        PARENT: "dcmr_genericScout",
+        LABEL: "Speedster",
+        GUNS: [
+            ...weaponMirror({
+                POSITION: [18 / 1.5, 10 / 1.5, 1, 0, 5 / 1.5, 0, 0.5],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.twin, g.triplet, g.dcmr_scout]),
+                    TYPE: "bullet"
+                }
+            }, 0),
+            ...weaponMirror({
+                POSITION: [16 / 1.5, 10 / 1.5, 1, 0, -2, 150, 0.5],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
+                    TYPE: "bullet"
+                }
+            }, 0),
+            ...weaponMirror({
+                POSITION: [17 / 1.5, 10 / 1.5, 1, 0, 0, 150, 0.25],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
+                    TYPE: "bullet"
+                }
+            }, 0),
+            {
+                POSITION: [21 / 1.5, 10 / 1.5, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.twin, g.triplet, g.dcmr_scout]),
+                    TYPE: "bullet"
+                }
+            }
+        ],
+    }
+
+    Class.dcmr_roller = {
+        PARENT: "dcmr_genericScout",
+        LABEL: "Roller",
+        GUNS: [
+            {
+                POSITION: [21 / 1.5, 18 / 1.5, 1, 0, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.dcmr_scout]),
+                    TYPE: "bullet"
+                }
+            }
+        ]
+    }
 }
 
 Class.developer.UPGRADES_TIER_0.push("dcmr_mother", "dcmr_expender")
 
 Class.dcmr_mother.UPGRADES_TIER_1.push("dcmr_bigMama", "dcmr_caretaker", "dcmr_invasion", "dcmr_protector", "dcmr_residence")
 
-Class.dcmr_expender.UPGRADES_TIER_1.push()
+Class.dcmr_expender.UPGRADES_TIER_1.push("dcmr_defender", "dcmr_crusher", "dcmr_roller", "dcmr_speedster", "dcmr_engulpher")
