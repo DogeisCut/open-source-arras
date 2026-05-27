@@ -1621,3 +1621,11 @@ exports.makeDrive = (type, name = -1) => {
     output.DANGER = type.DANGER + 1;
     return output;
 }
+
+exports.makeDeco = (shape = 0, color = 16) => {
+    return {
+        PARENT: "genericTank",
+        SHAPE: shape,
+        COLOR: color,
+    };
+}
