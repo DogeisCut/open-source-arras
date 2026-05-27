@@ -1580,48 +1580,6 @@ exports.makeSnake = (type, count = 2, name = -1, options = {}) => {
     return output;
 }
 
-exports.makeDrive = (type, name = -1) => {
-    type = ensureIsClass(type);
-    let output = exports.dereference(type);
-    let bodyDeco = [
-        {
-            TYPE: "overdriveDeco",
-            POSITION: {
-                SIZE: 9,
-                LAYER: 1
-            }
-        }
-    ];
-
-    let GUNS = output.GUNS;
-    for (let gun of GUNS) {
-        if (!gun.PROPERTIES) continue;
-        if (!gun.PROPERTIES.TYPE) continue;
-
-        const name = (Array.isArray(gun.PROPERTIES.TYPE) ? gun.PROPERTIES.TYPE[0][0] : gun.PROPERTIES.TYPE) + "Drived"
-        Class[name] = exports.makeAuto(gun.PROPERTIES.TYPE, "", {size: 7.5, type: 'droneAutoTurret'})
-        gun.PROPERTIES.TYPE = name
-    }
-
-    if (type.GUNS != null) {
-        output.GUNS = GUNS;
-    }
-    if (type.TURRETS == null) {
-        output.TURRETS = [...bodyDeco];
-    } else {
-        output.TURRETS = [...type.TURRETS, ...bodyDeco];
-    }
-    if (name == -1) {
-        output.LABEL = type.LABEL + "drive";
-        output.UPGRADE_LABEL = type.LABEL + "drive";
-    } else {
-        output.LABEL = name;
-        output.UPGRADE_LABEL = name;
-    }
-    output.DANGER = type.DANGER + 1;
-    return output;
-}
-
 exports.makeDeco = (shape = 0, color = 16) => {
     return {
         PARENT: "genericTank",

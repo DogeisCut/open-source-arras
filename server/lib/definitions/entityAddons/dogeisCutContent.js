@@ -1195,10 +1195,10 @@ fun: {
         Class.ohGod = makeGuard("ohGod", "Oh God")
         Class.ohGod = makeBird("ohGod", "Oh God")
         Class.ohGod = makeAuto("ohGod", "Oh God")
-        Class.ohGod = makeDrive("ohGod", "Oh God")
+        Class.ohGod = makeDrive("ohGod", { label: "Oh God"})
 
         Class.rocknaut = {
-            PARENT: "genericDreadnoughtOfficialV2",
+            PARENT: "genericDreadnought_dreadsV2",
             TYPE: "wall",
             DAMAGE_CLASS: 1,
             LABEL: "Rocknaut",
