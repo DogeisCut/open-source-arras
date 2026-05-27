@@ -1,6 +1,8 @@
 const {base} = require('../constants.js');
 const {basePolygonDamage, basePolygonHealth, statnames} = require("../constants");
-const {combineStats, makeTurret, makeDeco, weaponMirror, weaponArray} = require("../facilitators");
+const { combineStats, makeTurret, makeDeco, weaponMirror, weaponArray } = require("../facilitators");
+
+return;
 
 // This addon is enabled by default. If you want to enable it, simply make the line below run.
 // return console.log("[scenexe.js] is disabled.");

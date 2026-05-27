@@ -21,7 +21,7 @@ module.exports = {
             featured: false,
 
             region: "local", // The region the server is on.
-            gamemode: ["mothership"], // The selected gamemode.
+            gamemode: ["tdm"], // The selected gamemode.
             player_cap: 80, // Not including bots.
 
             properties: { // This overrides settings in the config.js file, providing the selected gamemode doesn't also override it.

@@ -979,3 +979,149 @@ exports.makePresent = (outcolor, wrapcolor) => {
         ]
     }
 }
+
+exports.makeDrive = (type, name = -1) => {
+    type = ensureIsClass(type);
+    let output = exports.dereference(type);
+    let bodyDeco = [
+        {
+            TYPE: "overdriveDeco",
+            POSITION: {
+                SIZE: 9,
+                LAYER: 1
+            }
+        }
+    ];
+
+    let GUNS = output.GUNS;
+    for (let gun of GUNS) {
+        if (!gun.PROPERTIES) continue;
+        if (!gun.PROPERTIES.TYPE) continue;
+
+        const name = (Array.isArray(gun.PROPERTIES.TYPE) ? gun.PROPERTIES.TYPE[0][0] : gun.PROPERTIES.TYPE) + "Drived"
+        Class[name] = exports.makeAuto(gun.PROPERTIES.TYPE, "", {size: 7.5, type: 'droneAutoTurret'})
+        gun.PROPERTIES.TYPE = name
+    }
+
+    if (type.GUNS != null) {
+        output.GUNS = GUNS;
+    }
+    if (type.TURRETS == null) {
+        output.TURRETS = [...bodyDeco];
+    } else {
+        output.TURRETS = [...type.TURRETS, ...bodyDeco];
+    }
+    if (name == -1) {
+        output.LABEL = type.LABEL + "drive";
+        output.UPGRADE_LABEL = type.LABEL + "drive";
+    } else {
+        output.LABEL = name;
+        output.UPGRADE_LABEL = name;
+    }
+    output.DANGER = type.DANGER + 1;
+    return output;
+}
+
+function rotatePoint(px, py, cx, cy, degrees) {
+    const radians = degrees * (Math.PI / 180);
+
+    const x = px - cx;
+    const y = py - cy;
+
+    let rotatedX = x * Math.cos(radians) - y * Math.sin(radians);
+    let rotatedY = x * Math.sin(radians) + y * Math.cos(radians);
+    if (Math.abs(rotatedX) < 0.01) {
+        rotatedX = 0
+    }
+    if (Math.abs(rotatedY) < 0.01) {
+        rotatedY = 0
+    }
+    return {
+        x: rotatedX + cx,
+        y: rotatedY + cy
+    };
+}
+let pslazyRealSizes = [1, 1, 1];
+for (let i = 3; i < 17; i++) {
+    // We say that the real size of a 0-gon, 1-gon, 2-gon is one, then push the real sizes of triangles, squares, etc...
+    let circum = (2 * Math.PI) / i;
+    pslazyRealSizes.push(Math.sqrt(circum * (1 / Math.sin(circum))));
+}
+exports.createPolySVG = (options = {}) => {
+    let svgPoints = [];
+    let svgPoints2 = [];
+    let svgPoints3 = [];
+    options.sides ??= 3
+    options.size ??= 1
+    options.fixSize ??= false
+    options.fixSize = options.fixedSize
+    options.curvy ??= false
+    options.curve ??= 1
+    options.hollow ??= false
+    options.hollowMultiplier ??= 0.5
+    options.rotation ??= 0
+    if (options.fixSize === true) {
+        if (pslazyRealSizes.length > Math.abs(options.sides)) {
+            options.size = pslazyRealSizes[options.sides]
+        }
+    }
+    if (options.curvy === true) {
+        for(let i = 0; i < options.sides + 1; i++) {
+            svgPoints.push(rotatePoint(options.size, 0, 0, 0, options.rotation+(360/options.sides)*i))
+        }
+    } else {
+        for(let i = 0; i < options.sides; i++) {
+            svgPoints.push(rotatePoint(options.size, 0, 0, 0, options.rotation+(360/options.sides)*i))
+        }
+    }
+    if (options.hollow === true) {
+        if (options.curvy === true) {
+            for(let i = 0; i < options.sides + 1; i++) {
+                svgPoints.push(rotatePoint(options.size * options.hollowMultiplier, 0, 0, 0, options.rotation-(360/options.sides)*i))
+            }
+        } else {
+            for(let i = 0; i < options.sides; i++) {
+                svgPoints.push(rotatePoint(options.size * options.hollowMultiplier, 0, 0, 0, options.rotation-(360/options.sides)*i))
+            }
+        }
+    }
+    if (options.curvy === true) {
+        for(let i = 0; i < options.sides + 1; i++) {
+            if (i !== 0) {
+                svgPoints2.push("A " + options.curve + " " + options.curve + " 0 0 0", svgPoints[i].x);
+                svgPoints2.push(svgPoints[i].y);
+            } else {
+                svgPoints2.push("L", svgPoints[i].x);
+                svgPoints2.push(svgPoints[i].y);
+            }
+        }
+    } else {
+        for(let i = 0; i < options.sides; i++) {
+            svgPoints2.push("L", svgPoints[i].x);
+            svgPoints2.push(svgPoints[i].y);
+        }
+    }
+    if (options.hollow === true) {
+        if (options.curvy === true) {
+            for(let i = 0; i < options.sides + 1; i++) {
+                if (i !== 0) {
+                    svgPoints3.push("A " + options.curve + " " + options.curve + " 0 0 0", svgPoints[i].x);
+                    svgPoints3.push(svgPoints[i+options.sides].y);
+                } else {
+                    svgPoints3.push("L", svgPoints[i].x);
+                    svgPoints3.push(svgPoints[i+options.sides].y);
+                }
+            }
+        } else {
+            for(let i = 0; i < options.sides; i++) {
+                svgPoints3.push("L", svgPoints[i+options.sides].x);
+                svgPoints3.push(svgPoints[i+options.sides].y);
+            }
+        }
+    }
+    if (options.hollow === true) {
+        return "M " + svgPoints2.toString().replaceAll(",", " ").slice(2) + " Z" +  " M " + svgPoints3.toString().replaceAll(",", " ").slice(2) + " Z"
+    } else {
+        return "M " + svgPoints2.toString().replaceAll(",", " ").slice(2) + " Z"
+    }
+}
